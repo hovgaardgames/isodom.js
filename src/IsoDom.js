@@ -128,7 +128,7 @@ class IsoDomItem {
      */
     update() {
         if (this.el) {
-            this.el.setAttribute('src', this.image());
+            this.iso.config.updateItem(this);
             this.el.setAttribute('data-name', this.name);
             this.el.setAttribute('data-orientation', this.orientation);
         }
@@ -199,6 +199,7 @@ class IsoDom {
             rows: 10,
             columns: 10,
             gridClass: 'iso-dom',
+            itemClass: 'iso-dom-item',
             rowClass: 'iso-dom__row',
             columnClass: 'iso-dom__column',
             itemContainerClass: 'iso-dom-items',
@@ -208,6 +209,12 @@ class IsoDom {
             cellPosition(cell) {
                 // TODO using jQuery
                 return $(cell.el).position();
+            },
+            createItem(item) {
+                return document.createElement('img');
+            },
+            updateItem(item) {
+                item.el.setAttribute('src', item.image());
             },
         };
 
@@ -490,10 +497,10 @@ class IsoDom {
             return item;
         }
 
-        const img = document.createElement('img');
-        this.config.itemContainer.appendChild(img);
-
-        item.setElement(img);
+        const node = this.config.createItem(item);
+        node.classList.add(this.config.itemClass);
+        this.config.itemContainer.appendChild(node);
+        item.setElement(node);
 
         return item;
     }

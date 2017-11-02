@@ -31,6 +31,20 @@
         itemContainer: document.getElementById('objectContainer'),
         columns: 20,
         rows: 21,
+        createItem(item) {
+            if (item.name === 'desk') {
+                const root = document.createElement('div');
+                const img = document.createElement('img');
+                root.appendChild(img);
+                item.img = img;
+                return root;
+            }
+
+            return document.createElement('img');
+        },
+        updateItem(item) {
+            (item.img || item.el).setAttribute('src', item.image());
+        },
         cellCreated(node, cell, iso) {
             node.onclick = function () {
                 if (!dragging) {
