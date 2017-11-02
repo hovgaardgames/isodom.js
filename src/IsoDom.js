@@ -221,7 +221,7 @@ class IsoDom {
 
         // Validate grid element
         if (!this.config.grid) {
-            throw new Error('`table` config property must be set.');
+            throw new Error('`grid` config property must be set.');
         }
 
         // Validate item container
