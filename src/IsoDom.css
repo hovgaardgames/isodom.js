@@ -7,8 +7,7 @@
     border-collapse: collapse;
 
     /* TODO calculate? */
-    margin-left: 462px;
-    margin-top: 100px;
+    margin-left: 890px;
 }
 
 .iso-dom__column {
@@ -30,6 +29,9 @@
 /* DEV STUFF BELOW */
 
 #objectContainer {
+    position: absolute;
+    top: 92px;
+    left: -144px;
     pointer-events: none;
 }
 
@@ -61,120 +63,3 @@ img.iso-dom-item {
     border-radius: 5px;
     cursor: pointer;
 }
-
-[data-name='tv'] {
-    margin-top: -308px;
-    margin-left: -80px;
-}
-
-[data-name='tnc'][data-orientation='SW'] {
-    margin-left: -190px;
-    margin-top: -168px;
-}
-
-[data-name='tnc'][data-orientation='NE'] {
-    margin-left: -213px;
-    margin-top: -146px;
-}
-
-[data-name='tnc'][data-orientation='SE'] {
-    margin-left: -364px;
-    margin-top: -170px;
-}
-
-[data-name='tnc'][data-orientation='NW'] {
-    margin-left: -325px;
-    margin-top: -150px;
-}
-
-[data-name='whiteboard'] {
-    margin-top: -264px;
-    margin-left: -92px;
-}
-
-[data-name='whiteboard'][data-orientation='NW'] {
-    margin-top: -265px;
-    margin-left: -163px;
-}
-
-[data-name='glass-wall'] {
-    margin-left: -155px;
-    margin-top: -369px;
-}
-
-[data-name='bench-red'][data-orientation='SE'], [data-name='bench-red'][data-orientation='NW'] {
-    margin-top: -125px;
-    margin-left: -190px;
-}
-
-[data-name='bench-red'][data-orientation='NE'], [data-name='bench-red'][data-orientation='SW'] {
-    margin-top: -129px;
-    margin-left: -120px;
-}
-
-[data-name='glass-wall-corner'] {
-    margin-left: -156px;
-    margin-top: -400px;
-}
-
-[data-name='glass-wall-corner'][data-orientation='NE'] {
-    margin-left: -123px;
-    margin-top: -379px;
-}
-
-[data-name='wall-t'] {
-    margin-left: -155px;
-    margin-top: -369px;
-}
-
-[data-name='meeting-table'][data-orientation='SW'] {
-    margin-left: -471px;
-    margin-top: -228px;
-}
-
-[data-name='meeting-table'][data-orientation='NW'] {
-    margin-left: -607px;
-    margin-top: -228px;
-}
-
-[data-name='reception'] {
-    margin-left: -322px;
-    margin-top: -136px;
-}
-
-[data-name='desk'][data-orientation='NE'] {
-    margin-top: -227px;
-    margin-left: -154px;
-}
-
-[data-name='desk'][data-orientation='NW'] {
-    margin-top: -227px;
-    margin-left: -195px;
-}
-
-[data-name='desk'][data-orientation='SE'] {
-    margin-top: -206px;
-    margin-left: -160px;
-}
-
-[data-name='desk'][data-orientation='SW']{
-    margin-top: -201px;
-    margin-left: -215px;
-}
-
-[data-name='closet'][data-orientation='SW']{
-    margin-top: -334px;
-    margin-left: -181px;
-}
-
-[data-name='closet'][data-orientation='NE'] {
-    margin-top: -329px;
-    margin-left: -172px;
-}
-
-[data-name='closet'][data-orientation='SE'], [data-name='closet'][data-orientation='NW'] {
-    margin-top: -332px;
-    margin-left: -233px;
-}
-
-

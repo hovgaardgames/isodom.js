@@ -31,20 +31,21 @@
         itemContainer: document.getElementById('objectContainer'),
         columns: 20,
         rows: 21,
-        createItem(item) {
-            if (item.name === 'desk') {
-                const root = document.createElement('div');
-                const img = document.createElement('img');
-                root.appendChild(img);
-                item.img = img;
-                return root;
-            }
-
-            return document.createElement('img');
-        },
-        updateItem(item) {
-            (item.img || item.el).setAttribute('src', item.image());
-        },
+        cellSize: [187, 187],
+//        createItem(item) {
+//            if (item.name === 'desk') {
+//                const root = document.createElement('div');
+//                const img = document.createElement('img');
+//                root.appendChild(img);
+//                item.img = img;
+//                return root;
+//            }
+//
+//            return document.createElement('img');
+//        },
+//        updateItem(item) {
+//            (item.img || item.el).setAttribute('src', item.image());
+//        },
         cellCreated(node, cell, iso) {
             node.onclick = function () {
                 if (!dragging) {
@@ -82,317 +83,615 @@
             };
         },
         items: {
-            tv: {
+            vase1: {
+                id: 1,
+                imagePath: "assets/vase1-{orientation}.png",
                 orientation: IsoDom.ORIENTATION_SW,
+                price: 100,
+                bonus: 0.5,
                 size: [1, 1],
+                tier: 1,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/tv_stand1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/tv_stand1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/tv_stand1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/tv_stand1-3.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/vase1-1.png', offset: {top: -182, left: 142}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/vase1-2.png', offset: {top: -192, left: 149}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/vase1-3.png', offset: {top: -188, left: 143}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/vase1-4.png', offset: {top: -192, left: 149}},
                 },
             },
-            closet: {
+            vase2: {
+                id: 2,
+                Path: "assets/vase2-{orientation}.png",
                 orientation: IsoDom.ORIENTATION_SW,
-                size: [2, 1],
-                images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/closet1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/closet1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/closet1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/closet1-3.png',
-                },
-            },
-            tnc: {
-                orientation: IsoDom.ORIENTATION_SW,
-                size: [4, 2],
-                images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/table_and_chairs1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/table_and_chairs1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/table_and_chairs1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/table_and_chairs1-3.png',
-                },
-            },
-            whiteboard: {
-                orientation: IsoDom.ORIENTATION_SW,
-                size: [2, 1],
-                images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/whiteboard2-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/whiteboard2-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/whiteboard2-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/whiteboard2-3.png',
-                },
-            },
-            'glass-wall': {
-                orientation: IsoDom.ORIENTATION_SW,
+                price: 100,
+                bonus: 0.5,
                 size: [1, 1],
+                tier: 5,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/glass_wall1-1.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/glass_wall1-1.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/glass_wall1-2.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/glass_wall1-2.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/vase2-1.png', offset: {top: -222, left: 172}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/vase2-2.png', offset: {top: -222, left: 177}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/vase2-3.png', offset: {top: -222, left: 172}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/vase2-4.png', offset: {top: -222, left: 177}},
                 },
             },
-            'glass-wall-corner': {
+            closet1: {
+                id: 3,
+                imagePath: "assets/closet1-{orientation}.png",
                 orientation: IsoDom.ORIENTATION_SW,
+                price: 1000,
+                bonus: 1,
+                size: [1, 2],
+                tier: 1,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/closet1-1.png', offset: {top: -431, left: -36}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/closet1-2.png', offset: {top: -422, left: 65}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/closet1-3.png', offset: {top: -431, left: -36}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/closet1-4.png', offset: {top: -422, left: 65}},
+                }
+            },
+            small_closet1: {
+                id: 4,
+                imagePath: "assets/small_closet1-{orientation}.png",
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 500,
+                bonus: 0.5,
                 size: [1, 1],
+                tier: 2,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/glass_wall_corner1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/glass_wall_corner1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/glass_wall_corner1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/glass_wall_corner1-3.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/small_closet1-1.png', offset: {top: -265, left: 90}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/small_closet1-2.png', offset: {top: -265, left: 66}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/small_closet1-3.png', offset: {top: -265, left: 90}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/small_closet1-4.png', offset: {top: -265, left: 66}},
+                }
+            },
+            couch_blue1: {
+                id: 5,
+                imagePath: "assets/couch_blue1-{orientation}.png",
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 1500,
+                bonus: 1.5,
+                size: [1, 3],
+                tier: 2,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_blue1-1.png', offset: {top: -391, left: 120}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_blue1-2.png', offset: {top: -396, left: -160}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_blue1-3.png', offset: {top: -391, left: 120}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_blue1-4.png', offset: {top: -396, left: -160}},
                 },
             },
-            'wall-t': {
+            bench_red1: {
+                id: 6,
+                imagePath: "assets/bench_red1-{orientation}.png",
                 orientation: IsoDom.ORIENTATION_SW,
+                price: 800,
+                bonus: 0.5,
+                size: [1, 2],
+                tier: 3,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/bench_red1-1.png', offset: {top: -256, left: 115}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/bench_red1-2.png', offset: {top: -254, left: -15}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/bench_red1-3.png', offset: {top: -256, left: 115}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/bench_red1-4.png', offset: {top: -254, left: -15}},
+                }
+            },
+            small_bench_red1: {
+                id: 7,
+                imagePath: "assets/small_bench_red1-{orientation}.png",
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 400,
+                bonus: 0.25,
                 size: [1, 1],
+                tier: 4,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/wall_t1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/wall_t1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/wall_t1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/wall_t1-3.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/small_bench_red1-1.png', offset: {top: -166, left: 124}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/small_bench_red1-2.png', offset: {top: -166, left: 130}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/small_bench_red1-3.png', offset: {top: -166, left: 130}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/small_bench_red1-4.png', offset: {top: -166, left: 130}},
                 },
             },
-            'meeting-table': {
+            meeting_table1: {
+                id: 8,
                 orientation: IsoDom.ORIENTATION_SW,
-                size: [6, 4],
+                price: 3000,
+                bonus: 5,
+                size: [3, 6],
+                tier: 9,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/meeting_table1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/meeting_table1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/meeting_table1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/meeting_table1-3.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/meeting_table1-1.png', offset: {top: -216, left: -526}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/meeting_table1-2.png', offset: {top: -216, left: -135}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/meeting_table1-3.png', offset: {top: -216, left: -526}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/meeting_table1-4.png', offset: {top: -216, left: -135}},
+                }
+            },
+            table_and_chairs1: {
+                id: 9,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 1500,
+                bonus: 5,
+                size: [2, 4],
+                tier: 4,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/table_and_chairs1-1.png', offset: {top: -194, left: -194}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/table_and_chairs1-2.png', offset: {top: -164, left: 28}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/table_and_chairs1-3.png', offset: {top: -194, left: -194}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/table_and_chairs1-4.png', offset: {top: -194, left: 98}},
                 },
             },
-            'desk': {
+            watercooler1: {
+                id: 10,
                 orientation: IsoDom.ORIENTATION_SW,
-                size: [2, 2],
+                price: 250,
+                bonus: 1,
+                size: [1, 1],
+                tier: 5,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/desk1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/desk1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/desk1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/desk1-3.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/watercooler1-1.png', offset: {top: -292, left: 106}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/watercooler1-2.png', offset: {top: -292, left: 106}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/watercooler1-3.png', offset: {top: -292, left: 106}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/watercooler1-4.png', offset: {top: -292, left: 106}},
                 },
             },
-            'reception': {
+            reception_area1: {
+                id: 11,
                 orientation: IsoDom.ORIENTATION_SW,
+                price: 2500,
+                bonus: 3,
                 size: [3, 3],
+                tier: 11,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/reception_area1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/reception_area1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/reception_area1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/reception_area1-3.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/reception_area1-1.png', offset: {top: -132, left: -117}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/reception_area1-2.png', offset: {top: -132, left: -117}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/reception_area1-3.png', offset: {top: -132, left: -117}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/reception_area1-4.png', offset: {top: -132, left: -117}},
                 },
             },
-            'bench-red': {
+            coffe_closet1: {
+                id: 12,
                 orientation: IsoDom.ORIENTATION_SW,
-                size: [2, 1],
+                price: 500,
+                bonus: 3,
+                size: [1, 1],
+                tier: 2,
                 images: {
-                    [IsoDom.ORIENTATION_SW]: 'assets/bench_red1-4.png',
-                    [IsoDom.ORIENTATION_NE]: 'assets/bench_red1-2.png',
-                    [IsoDom.ORIENTATION_NW]: 'assets/bench_red1-1.png',
-                    [IsoDom.ORIENTATION_SE]: 'assets/bench_red1-3.png',
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/coffe_closet1-1.png', offset: {top: -265, left: 90}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/coffe_closet1-2.png', offset: {top: -265, left: 66}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/coffe_closet1-3.png', offset: {top: -265, left: 90}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/coffe_closet1-4.png', offset: {top: -265, left: 66}},
                 },
+            },
+            couch_black1: {
+                id: 13,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 2000,
+                bonus: 2,
+                size: [1, 1],
+                tier: 8,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_black1-1.png', offset: {top: -272, left: 90}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_black1-2.png', offset: {top: -272, left: 66}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_black1-3.png', offset: {top: -272, left: 90}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_black1-4.png', offset: {top: -272, left: 66}},
+                }
+            },
+            couch_black2: {
+                id: 14,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 4000,
+                bonus: 3,
+                size: [1, 2],
+                tier: 8,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_black2-1.png', offset: {top: -308, left: 70}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_black2-2.png', offset: {top: -308, left: -58}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_black2-3.png', offset: {top: -308, left: 70}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_black2-4.png', offset: {top: -308, left: -58}},
+                },
+            },
+            tv_stand1: {
+                id: 15,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 1200,
+                bonus: 4,
+                size: [1, 2],
+                tier: 8,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/tv_stand1-1.png', offset: {top: -378, left: 70}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/tv_stand1-2.png', offset: {top: -381, left: 200}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/tv_stand1-3.png', offset: {top: -378, left: 70}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/tv_stand1-4.png', offset: {top: -381, left: 200}},
+                }
+            },
+            whiteboard2: {
+                id: 16,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 500,
+                bonus: 5,
+                size: [1, 2],
+                tier: 4,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/whiteboard2-1.png', offset: {top: -363, left: 16}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/whiteboard2-2.png', offset: {top: -363, left: 146}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/whiteboard2-3.png', offset: {top: -363, left: 15}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/whiteboard2-4.png', offset: {top: -363, left: 146}},
+                }
+            },
+            glass_wall1: {
+                id: 17,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 1,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall1-1.png', offset: {top: -513, left: 50}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall1-2.png', offset: {top: -513, left: 50}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall1-3.png', offset: {top: -513, left: 50}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall1-4.png', offset: {top: -513, left: 50}},
+                },
+            },
+            glass_wall_corner1: {
+                id: 18,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 1,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_corner1-1.png', offset: {top: -569, left: 50}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_corner1-2.png', offset: {top: -532, left: 110}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_corner1-3.png', offset: {top: -499, left: 50}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_corner1-4.png', offset: {top: -534, left: -12}},
+                },
+            },
+            glass_wall_t1: {
+                id: 19,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 1,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_t1-1.png', offset: {top: -516, left: 54}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_t1-2.png', offset: {top: -512, left: 51}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_t1-3.png', offset: {top: -516, left: 54}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_t1-4.png', offset: {top: -512, left: 51}},
+                },
+            },
+            glass_wall_x1: {
+                id: 20,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 1,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_x1-1.png', offset: {top: -514, left: 50}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_x1-2.png', offset: {top: -514, left: 50}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_x1-3.png', offset: {top: -514, left: 50}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_x1-4.png', offset: {top: -514, left: 50}},
+                }
+            },
+            vending_machine1: {
+                id: 21,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 800,
+                bonus: 4,
+                size: [1, 2],
+                tier: 7,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/vending_machine1-1.png', offset: {top: -502, left: 63}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/vending_machine1-2.png', offset: {top: -499, left: -76}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/vending_machine1-3.png', offset: {top: -502, left: 63}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/vending_machine1-4.png', offset: {top: -499, left: -76}},
+                }
+            },
+            ping_pong_table1: {
+                id: 22,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 700,
+                bonus: 4,
+                size: [2, 4],
+                tier: 10,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/ping_pong_table1-1.png', offset: {top: -512, left: 52}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/ping_pong_table1-2.png', offset: {top: -512, left: -256}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/ping_pong_table1-3.png', offset: {top: -512, left: 52}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/ping_pong_table1-4.png', offset: {top: -512, left: -256}},
+                },
+            },
+            large_coffee_machine1: {
+                id: 23,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 5700,
+                bonus: 9,
+                size: [1, 2],
+                tier: 10,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/large_coffee_machine1-1.png', offset: {top: -353, left: 121}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/large_coffee_machine1-2.png', offset: {top: -352, left: -6}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/large_coffee_machine1-3.png', offset: {top: -353, left: 121}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/large_coffee_machine1-4.png', offset: {top: -352, left: -6}},
+                },
+            },
+            lounge_chair1: {
+                id: 24,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 1000,
+                bonus: 2,
+                size: [1, 1],
+                tier: 9,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/lounge_chair1-1.png', offset: {top: -260, left: 65}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/lounge_chair1-2.png', offset: {top: -260, left: 52}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/lounge_chair1-3.png', offset: {top: -283, left: 68}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/lounge_chair1-4.png', offset: {top: -292, left: 52}},
+                },
+            },
+            wall1: {
+                id: 25,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 8,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/wall1-1.png', offset: {top: -513, left: 50}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/wall1-2.png', offset: {top: -513, left: 50}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/wall1-3.png', offset: {top: -513, left: 50}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/wall1-4.png', offset: {top: -513, left: 50}},
+                },
+            },
+            wall_corner1: {
+                id: 26,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 8,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_corner1-1.png', offset: {top: -569, left: 50}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_corner1-2.png', offset: {top: -532, left: 110}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_corner1-3.png', offset: {top: -499, left: 50}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_corner1-4.png', offset: {top: -534, left: -12}},
+                },
+                placementOffset: [
+                    {top: -569, left: 50},
+                    {top: -532, left: 110},
+                    {top: -499, left: 50},
+                    {top: -534, left: -12},
+                ]
+            },
+            wall_t1: {
+                id: 27,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 8,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_t1-1.png', offset: {top: -516, left: 54}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_t1-2.png', offset: {top: -512, left: 51}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_t1-3.png', offset: {top: -516, left: 54}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_t1-4.png', offset: {top: -512, left: 51}},
+                },
+            },
+            wall_x1: {
+                id: 28,
+                orientation: IsoDom.ORIENTATION_SW,
+                price: 200,
+                bonus: 0.1,
+                size: [1, 1],
+                tier: 8,
+                images: {
+                    [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_x1-1.png', offset: {top: -514, left: 50}},
+                    [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_x1-2.png', offset: {top: -514, left: 50}},
+                    [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_x1-3.png', offset: {top: -514, left: 50}},
+                    [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_x1-4.png', offset: {top: -514, left: 50}},
+                }
             },
         },
     });
 
+
     // TEST 1
-    // iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_SE }), 4, 0);
-    // iso.addItem(new IsoDomItem('closet', iso), 2, 0);
-    // iso.addItem(new IsoDomItem('closet', iso), 2, 1);
-    // iso.addItem(new IsoDomItem('closet', iso), 4, 2);
-    // iso.addItem(new IsoDomItem('tv', iso), 0, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_SE }), 4, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso), 2, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso), 2, 1);
+    // iso.addItem(new IsoDomItem('closet1', iso), 4, 2);
+    // iso.addItem(new IsoDomItem('tv_stand1', iso), 0, 0);
 
     // TEST 2
-    // iso.addItem(new IsoDomItem('closet', iso), 0, 0);
-    // iso.addItem(new IsoDomItem('closet', iso), 2, 0);
-    // iso.addItem(new IsoDomItem('closet', iso), 4, 0);
-    // iso.addItem(new IsoDomItem('closet', iso), 6, 0);
-    // iso.addItem(new IsoDomItem('closet', iso), 8, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso), 0, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso), 2, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso), 4, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso), 6, 0);
+    // iso.addItem(new IsoDomItem('closet1', iso), 8, 0);
     //
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 0, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 1, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 2, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 3, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 4, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 5, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 6, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 7, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 8, 1);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 9, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 0, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 1, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 2, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 3, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 4, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 5, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 6, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 7, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 8, 1);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 9, 1);
     //
-    // iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 2);
-    // iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 2);
-    // iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_NE }), 4, 2);
-    // iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_NE }), 6, 2);
-    // iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_NE }), 8, 2);
+    // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 2);
+    // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 2);
+    // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_NE }), 4, 2);
+    // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_NE }), 6, 2);
+    // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_NE }), 8, 2);
     //
-    // iso.addItem(new IsoDomItem('tnc', iso), 3, 3);
+    // iso.addItem(new IsoDomItem('table_and_chairs1', iso), 3, 3);
     //
-    // iso.addItem(new IsoDomItem('whiteboard', iso), 3, 5);
-    // iso.addItem(new IsoDomItem('whiteboard', iso), 5, 5);
+    // iso.addItem(new IsoDomItem('whiteboard2', iso), 3, 5);
+    // iso.addItem(new IsoDomItem('whiteboard2', iso), 5, 5);
     //
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 1, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 2, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 3, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 4, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 5, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 6, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 7, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 8, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 9, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 1, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 2, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 3, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 4, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 5, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 6, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 7, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 8, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 9, 6);
     //
-    // iso.addItem(new IsoDomItem('meeting-table', iso), 2, 7);
+    // iso.addItem(new IsoDomItem('meeting_table1', iso), 2, 7);
     //
-    // iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_SE }), 1, 8);
+    // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_SE }), 1, 8);
     //
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 7);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 8);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 9);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 10);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 11);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 7);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 8);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 9);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 10);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 11);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 12);
     //
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 0, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 1, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 2, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 3, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 4, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 5, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 6, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 7, 12);
-    // iso.addItem(new IsoDomItem('glass-wall', iso), 8, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 0, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 1, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 2, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 3, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 4, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 5, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 6, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 7, 12);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso), 8, 12);
     //
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 6);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 7);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 8);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 9);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 10);
-    // iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 11);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 6);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 7);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 8);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 9);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 10);
+    // iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 0, 11);
 
     // TEST 3
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 4, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 6, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 8, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 10, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 12, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 14, 0);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 16, 0);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 18, 0);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 18, 1);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 4, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 6, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 8, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 10, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 12, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 14, 0);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 16, 0);
 
-    iso.addItem(new IsoDomItem('desk', iso), 0, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 2, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 4, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 6, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 8, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 10, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 12, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 14, 2);
-    iso.addItem(new IsoDomItem('desk', iso), 16, 2);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 18, 3);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SW}), 0, 0);
 
-    iso.addItem(new IsoDomItem('glass-wall', iso), 0, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 1, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 2, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 3, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 4, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 5, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 6, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 7, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 8, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 9, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 10, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 11, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 12, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 13, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 14, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 15, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 16, 4);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 17, 4);
-    iso.addItem(new IsoDomItem('glass-wall-corner', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 18, 0);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 18, 1);
 
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 5);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 5);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 4, 5);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 6, 5);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 8, 5);
-    iso.addItem(new IsoDomItem('tnc', iso, { orientation: IsoDom.ORIENTATION_NE }), 12, 5);
+    //    iso.addItem(new IsoDomItem('desk', iso), 0, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 2, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 4, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 6, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 8, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 10, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 12, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 14, 2);
+    //    iso.addItem(new IsoDomItem('desk', iso), 16, 2);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 18, 3);
 
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 7);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 7);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 0, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 1, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 2, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 3, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 4, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 5, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 6, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 7, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 8, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 9, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 10, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 11, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 12, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 13, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 14, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 15, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 16, 4);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 17, 4);
+    iso.addItem(new IsoDomItem('glass_wall_corner1', iso, {orientation: IsoDom.ORIENTATION_NW}), 18, 4);
 
-    iso.addItem(new IsoDomItem('whiteboard', iso), 12, 7);
-    iso.addItem(new IsoDomItem('whiteboard', iso), 14, 7);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 5);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 5);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 4, 5);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 6, 5);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 8, 5);
+    iso.addItem(new IsoDomItem('table_and_chairs1', iso, {orientation: IsoDom.ORIENTATION_NE}), 12, 5);
 
-    iso.addItem(new IsoDomItem('reception', iso), 17, 6);
-    iso.addItem(new IsoDomItem('reception', iso), 17, 9);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 7);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 7);
 
-    iso.addItem(new IsoDomItem('tnc', iso), 12, 8);
+    //    iso.addItem(new IsoDomItem('whiteboard2', iso), 12, 7);
+    iso.addItem(new IsoDomItem('whiteboard2', iso), 14, 7);
 
-    iso.addItem(new IsoDomItem('meeting-table', iso), 11, 10);
+    iso.addItem(new IsoDomItem('reception_area1', iso), 17, 6);
+    iso.addItem(new IsoDomItem('reception_area1', iso), 17, 9);
 
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 20);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 19);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 18);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 17);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 16);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 15);
-    iso.addItem(new IsoDomItem('wall-t', iso), 17, 14);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 18, 14);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 19);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 17);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 15);
+    iso.addItem(new IsoDomItem('meeting_table1', iso), 11, 10);
 
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 20);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 19);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 18);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 17);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 16);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 15);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 13, 14);
-    iso.addItem(new IsoDomItem('wall-t', iso), 14, 14);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 15, 14);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 19);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 17);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 15);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 20);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 19);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 18);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 17);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 16);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 15);
+    iso.addItem(new IsoDomItem('wall_t1', iso), 17, 14);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 18, 14);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 19);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 17);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 15);
 
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 20);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 19);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 18);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 17);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 16);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 15);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 8, 14);
-    iso.addItem(new IsoDomItem('wall-t', iso), 9, 14);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 10, 14);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_SE }), 12, 19);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_SE }), 12, 17);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_SE }), 12, 15);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 10, 19);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 10, 17);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 10, 15);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 20);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 19);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 18);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 17);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 16);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 15);
+    //    iso.addItem(new IsoDomItem('glass_wall1', iso), 13, 14);
+    iso.addItem(new IsoDomItem('wall_t1', iso), 14, 14);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 15, 14);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 19);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 17);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 15);
 
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 19);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 19);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 3, 17);
-    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 0, 17);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 20);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 19);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 18);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 17);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 16);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 15);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 8, 14);
+    iso.addItem(new IsoDomItem('wall_t1', iso), 9, 14);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 10, 14);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_SE }), 12, 19);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_SE }), 12, 17);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_SE }), 12, 15);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 10, 19);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 10, 17);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 10, 15);
 
-    iso.addItem(new IsoDomItem('meeting-table', iso, { orientation: IsoDom.ORIENTATION_NW }), 5, 15);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 19);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 19);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 3, 17);
+    //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 0, 17);
 
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 10);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 11);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 12);
-    iso.addItem(new IsoDomItem('glass-wall', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 13);
-    iso.addItem(new IsoDomItem('glass-wall-corner', iso, { orientation: IsoDom.ORIENTATION_NE }), 3, 14);
-    iso.addItem(new IsoDomItem('glass-wall', iso), 4, 14);
-    iso.addItem(new IsoDomItem('whiteboard', iso, { orientation: IsoDom.ORIENTATION_NW }), 2, 10);
-    iso.addItem(new IsoDomItem('bench-red', iso, { orientation: IsoDom.ORIENTATION_NW }), 2, 12);
+    //    iso.addItem(new IsoDomItem('meeting_table1', iso, { orientation: IsoDom.ORIENTATION_NW }), 5, 15);
 
-    iso.addItem(new IsoDomItem('tv', iso), 5, 8);
-    iso.addItem(new IsoDomItem('closet', iso), 7, 8);
-    iso.addItem(new IsoDomItem('closet', iso, { orientation: IsoDom.ORIENTATION_SE }), 6, 8);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 10);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 11);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 12);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 13);
+    iso.addItem(new IsoDomItem('glass_wall_corner1', iso, {orientation: IsoDom.ORIENTATION_NE}), 3, 14);
+    iso.addItem(new IsoDomItem('glass_wall1', iso), 4, 14);
+    //iso.addItem(new IsoDomItem('whiteboard2', iso, { orientation: IsoDom.ORIENTATION_NW }), 2, 10);
+    //iso.addItem(new IsoDomItem('bench-red', iso, { orientation: IsoDom.ORIENTATION_NW }), 2, 12);
+
+    iso.addItem(new IsoDomItem('tv_stand1', iso), 5, 8);
+    iso.addItem(new IsoDomItem('closet1', iso), 7, 8);
+    //    iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_SE }), 6, 8);
+
 
     iso.draw();
 </script>
