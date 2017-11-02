@@ -206,8 +206,23 @@ class IsoDom {
                 // Do nothing
             },
             cellPosition(cell) {
-                // TODO using jQuery
-                return $(cell.el).position();
+                const rect = cell.el.getBoundingClientRect();
+                const body = document.body;
+                const doc = document.documentElement;
+
+                const scrollTop = (window.pageYOffset || doc.scrollTop || body.scrollTop) / (document.body.style.zoom || 1);
+                const scrollLeft = (window.pageXOffset || doc.scrollLeft || body.scrollLeft) / (document.body.style.zoom || 1);
+
+                const clientTop = doc.clientTop || body.clientTop || 0;
+                const clientLeft = doc.clientLeft || body.clientLeft || 0;
+
+                const top = rect.top + scrollTop + clientTop;
+                const left = rect.left + scrollLeft + clientLeft;
+
+                return {
+                    top: Math.round(top),
+                    left: Math.round(left),
+                };
             },
             createItem(item) {
                 return document.createElement('img');
