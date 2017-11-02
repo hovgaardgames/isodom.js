@@ -39,12 +39,7 @@
 }
 
 img.iso-dom-item {
-    transform: scale(0.55);
     pointer-events: none;
-}
-
-.iso-dom-item {
-    transform: scale(0.55);
 }
 
 .iso-dom-item img {

@@ -213,7 +213,10 @@ class IsoDom {
                 return document.createElement('img');
             },
             updateItem(item) {
-                item.el.setAttribute('src', item.image());
+                let image = item.image();
+                item.el.setAttribute('src', image.url);
+                item.el.style.marginTop = image.offset.top + "px";
+                item.el.style.marginLeft = image.offset.left + "px";
             },
         };
 
@@ -406,6 +409,9 @@ class IsoDom {
                 node.classList.add(this.config.columnClass);
                 node.setAttribute('row', y);
                 node.setAttribute('column', x);
+                node.style.width = this.config.cellSize[0] + "px";
+                node.style.height = this.config.cellSize[1] + "px";
+
                 node.__isodomcell__ = new IsoDomCell(this, node, x, y);
                 this._mapCell(node.__isodomcell__);
 
