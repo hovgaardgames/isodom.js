@@ -19,12 +19,14 @@
     border: 1px solid red;
 }
 
-/* DEV STUFF BELOW */
+/* TODO img style should be scoped? rather should be a class because it might not be an img? */
 img {
     position: absolute;
     transform: scale(0.55);
     pointer-events: none;
 }
+
+/* DEV STUFF BELOW */
 
 .actions {
     position: fixed;
@@ -47,14 +49,24 @@ img[data-name='tv'] {
     margin-left: -80px;
 }
 
-img[data-name='tnc'] {
-    margin-left: -222px;
-    margin-top: -150px;
-}
-
 img[data-name='tnc'][data-orientation='SW'] {
     margin-left: -190px;
     margin-top: -168px;
+}
+
+img[data-name='tnc'][data-orientation='NE'] {
+    margin-left: -213px;
+    margin-top: -146px;
+}
+
+img[data-name='tnc'][data-orientation='SE'], img[data-name='tnc'][data-orientation='NW'] {
+    margin-left: -364px;
+    margin-top: -170px;
+}
+
+img[data-name='tnc'][data-orientation='NW'] {
+    margin-left: -325px;
+    margin-top: -150px;
 }
 
 img[data-name='whiteboard'] {

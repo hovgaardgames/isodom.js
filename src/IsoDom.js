@@ -16,6 +16,7 @@ class IsoDomCell {
         this.itemRootCell = null;
         /** @type {IsoDomItem} */
         this.item = null;
+        this._cachePosition = null;
 
         this.update();
     }
@@ -32,9 +33,6 @@ class IsoDomCell {
             } else {
                 this.el.style.backgroundColor = '';
             }
-        } else {
-            this.el.innerHTML = '';
-            this.el.style.backgroundColor = '';
         }
 
         if (this.item && this.isItemRoot()) {
@@ -53,7 +51,11 @@ class IsoDomCell {
      * @return {{top, left}}
      */
     position() {
-        return this.iso.config.cellPosition(this);
+        if (this._cachePosition === null) {
+            this._cachePosition = this.iso.config.cellPosition(this);
+        }
+
+        return this._cachePosition;
     }
 
     /**
@@ -249,9 +251,52 @@ class IsoDom {
      * @param {Number} x
      * @param {Number} y
      */
-    placeItem(item, x, y) {
+    addItem(item, x, y) {
+        this.assertItemPlacement(item, x, y, false);
+        const cell = this.cell(x, y);
+
         this._mountItem(item);
-        this._mapItemToCells(item, this.cell(x, y));
+        this._mapItemToCells(item, cell);
+    }
+
+    /**
+     * Move item to another place.
+     * @param {IsoDomItem} item
+     * @param {Number} x
+     * @param {Number} y
+     */
+    moveItem(item, x, y) {
+        this.assertItemPlacement(item, x, y, true);
+        const cell = this.cell(x, y);
+
+        iso._unmapItemFromCells(item);
+        iso._mapItemToCells(item, cell);
+    }
+
+    /**
+     * Assert item placement on cell:
+     * - the cell is valid;
+     * - the item would not go out of bounds;
+     * - the area for the item is not taken by another item.
+     * @param {IsoDomItem} item
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Boolean} ignoringItem
+     */
+    assertItemPlacement(item, x, y, ignoringItem) {
+        const cell = this.cell(x, y);
+
+        if (!cell) {
+            throw new Error(`Cell (${x}, ${y}) is invalid.`);
+        }
+
+        if (this.isOutOfBounds(item, x, y)) {
+            throw new Error(`Item cannot be placed at (${x}, ${y}) as it would go out of bounds.`);
+        }
+
+        if (this.isAreaTaken(x, y, x + item.getWidth(), y + item.getHeight(), ignoringItem ? item : null)) {
+            throw new Error(`Area in range {(${x}, ${y}), (${x + item.getWidth() - 1}, ${y + item.getHeight() - 1})} is taken by another item.`);
+        }
     }
 
     /**
@@ -276,42 +321,54 @@ class IsoDom {
      * Execute DOM draw (aka. calculate z-index =.=).
      */
     draw() {
-        Object.values(this.cells).forEach(cell => {
-            cell.z = null;
-        });
+        for (const cell in this.cells) {
+            this.cells[cell].z = null;
+        }
 
         // Collect all cells and keep only root item cells
-        const boxes = this._cellBox(0, 0, this.config.columns, this.config.rows)
-            .filter(box => box.cell.item && box.cell.isItemRoot());
+        const boxes = this._itemsInArea(0, 0, this.config.columns, this.config.rows);
 
         // Set cell index
         const setIndex = box => {
             const limiters = [];
 
-            const zone = this._cellBox(0, 0, box.cell.x + box.cell.item.getWidth(), box.cell.y + box.cell.item.getHeight());
-            zone.forEach(zoneBox => {
-                if (zoneBox.cell.item && zoneBox.cell.isItemRoot() && zoneBox.cell.item !== box.cell.item && zoneBox.cell.z) {
-                    limiters.push(zoneBox.cell.z);
+            const zones = this._itemsInArea(0, 0, box.cell.x + box.cell.item.getWidth(), box.cell.y + box.cell.item.getHeight());
+            for (const zoneIndex in zones) {
+                const zone = zones[zoneIndex];
+                if (zone.cell.item !== box.cell.item && zone.cell.z) {
+                    limiters.push(zone.cell.z);
                 }
-            });
+            }
 
             box.cell.z = limiters.length ? Math.max(...limiters) + 1 : box.y + 1 + box.x;
         };
 
-        // Calculate z-index only for single row objects - might seem like this
-        // does nothing, but it is required for objects like glass window (1x1) behind a closet (1x2).
-        boxes.filter(box => box.cell.item.getHeight() === 1).forEach(setIndex);
-        // Glue shit together
-        boxes.forEach(setIndex);
+        // Calculate z-index only for single row items - might seem like this
+        // does nothing, but it is required for items like glass window (1x1) behind a closet (1x2).
+        for (const box in boxes) {
+            if (boxes[box].cell.item.getHeight() === 1) {
+                setIndex(boxes[box]);
+            }
+        }
+        // Adjust all items to their place
+        for (const box in boxes) {
+            setIndex(boxes[box]);
+        }
         // Make sure items are still in correct position because of mixed calculation order.
         // e.g. glass-wall (1x1) bottom does not get on top of bench-red (1x2).
-        boxes.filter(box => box.cell.item.getHeight() > 1).forEach(setIndex);
+        for (const box in boxes) {
+            if (boxes[box].cell.item.getHeight() > 1) {
+                setIndex(boxes[box]);
+            }
+        }
         // Final pass to make sure bench-red and such does not cut through the middle of a glass wall.
-        boxes.forEach(setIndex);
+        for (const box in boxes) {
+            setIndex(boxes[box]);
+        }
 
-        Object.keys(this.cells).forEach(cell => {
+        for (const cell in this.cells) {
             this.cells[cell].update();
-        });
+        }
     }
 
     /**
@@ -321,7 +378,15 @@ class IsoDom {
      * @private
      */
     findItemCells(item) {
-        return Object.values(this.cells).filter(cell => cell.item === item);
+        const cells = [];
+
+        for (const cell in this.cells) {
+            if (this.cells[cell].item === item) {
+                cells.push(this.cells[cell]);
+            }
+        }
+
+        return cells;
     }
 
     /**
@@ -350,6 +415,68 @@ class IsoDom {
         }
 
         this.config.table.appendChild(bodyNode);
+    }
+
+    /**
+     * Determine if area is taken.
+     * @param {Number} startX
+     * @param {Number} startY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @param {IsoDomItem} ignoreItem
+     * @returns {Boolean}
+     */
+    isAreaTaken(startX, startY, endX, endY, ignoreItem = null) {
+        return this.takenCells(startX, startY, endX, endY, ignoreItem).length > 0;
+    }
+
+    /**
+     * Determine if area is available for new items.
+     * @param {Number} startX
+     * @param {Number} startY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @param {IsoDomItem} ignoreItem
+     * @returns {Boolean}
+     */
+    isAreaAvailable(startX, startY, endX, endY, ignoreItem = null) {
+        return this.takenCells(startX, startY, endX, endY, ignoreItem).length === 0;
+    }
+
+    /**
+     * Get all taken cells in area.
+     * @param {Number} startX
+     * @param {Number} startY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @param {IsoDomItem} ignoreItem
+     * @returns {Boolean}
+     * @returns {Array}
+     */
+    takenCells(startX, startY, endX, endY, ignoreItem = null) {
+        const cells = [];
+
+        for (let x = startX; x < endX; x++) {
+            for (let y = startY; y < endY; y++) {
+                const cell = this.cell(x, y);
+                if (cell.item && cell.item !== ignoreItem) {
+                    cells.push(cell);
+                }
+            }
+        }
+
+        return cells;
+    }
+
+    /**
+     * Determine if an item would go out of bounds when placed on position.
+     * @param {IsoDomItem} item
+     * @param {Number} x
+     * @param {Number} y
+     * @returns {Boolean}
+     */
+    isOutOfBounds(item, x, y) {
+        return !Boolean(this.cell(x + item.getWidth() - 1, y + item.getHeight() - 1));
     }
 
     /**
@@ -407,8 +534,7 @@ class IsoDom {
         const cells = this.findItemCells(item);
 
         if (!cells.length) {
-            console.warn(`Item "${item.name}" is not in the DOM.`);
-            return;
+            throw new Error(`Item "${item.name}" is not in the DOM.`);
         }
 
         cells.forEach(cell => cell.setItem(null, null));
@@ -423,12 +549,15 @@ class IsoDom {
      * @returns {Array}
      * @private
      */
-    _cellBox(startX, startY, endX, endY) {
+    _itemsInArea(startX, startY, endX, endY) {
         const box = [];
 
         for (let row = startY; row < endY; row++) {
             for (let col = startX; col < endX; col++) {
-                box.push({ x: col, y: row, cell: this.cell(col, row) });
+                const cell = this.cell(col, row);
+                if (cell.isItemRoot()) {
+                    box.push({ x: col, y: row, cell: cell });
+                }
             }
         }
 
