@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<table id="grid"></table>
+<div id="grid"></div>
 <div id="objectContainer"></div>
 
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
@@ -27,7 +27,7 @@
 
     let iso = new IsoDom({
         debug: true,
-        table: document.getElementById('grid'),
+        grid: document.getElementById('grid'),
         itemContainer: document.getElementById('objectContainer'),
         columns: 20,
         rows: 21,

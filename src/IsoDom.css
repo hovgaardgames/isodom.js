@@ -13,6 +13,8 @@
 
 .iso-dom__column {
     text-align: center;
+    vertical-align: middle;
+    float: left;
 }
 
 .iso-dom.iso-dom--debug .iso-dom__column {
@@ -29,6 +31,11 @@
 
 #objectContainer {
     pointer-events: none;
+}
+
+#grid .iso-dom__column {
+    width: 100px;
+    height: 100px;
 }
 
 img.iso-dom-item {

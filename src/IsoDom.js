@@ -191,7 +191,7 @@ class IsoDom {
         this.config = {
             debug: false,
             /** @type HTMLElement */
-            table: null,
+            grid: null,
             /** @type HTMLElement */
             itemContainer: null,
             items: {},
@@ -200,7 +200,6 @@ class IsoDom {
             columns: 10,
             gridClass: 'iso-dom',
             itemClass: 'iso-dom-item',
-            rowClass: 'iso-dom__row',
             columnClass: 'iso-dom__column',
             itemContainerClass: 'iso-dom-items',
             cellCreated(node, cell, iso) {
@@ -220,9 +219,9 @@ class IsoDom {
 
         Object.assign(this.config, config);
 
-        // Validate table
-        if (!this.config.table || this.config.table.nodeName !== 'TABLE') {
-            throw new Error('`table` config property must be set and must be table element.');
+        // Validate grid element
+        if (!this.config.grid) {
+            throw new Error('`table` config property must be set.');
         }
 
         // Validate item container
@@ -231,13 +230,13 @@ class IsoDom {
         }
 
         // Set grid size and add classes
-        this.config.table.style.width = (this.config.columns * this.config.cellSize[0]) + 'px';
-        this.config.table.style.height = (this.config.rows * this.config.cellSize[1]) + 'px';
-        this.config.table.classList.add(this.config.gridClass);
+        this.config.grid.style.width = (this.config.columns * this.config.cellSize[0]) + ((this.config.columns + this.config.cellSize[0]) / 2) + 'px';
+        this.config.grid.style.height = (this.config.rows * this.config.cellSize[1]) + ((this.config.columns + this.config.cellSize[0]) / 2) + 'px';
+        this.config.grid.classList.add(this.config.gridClass);
         this.config.itemContainer.classList.add(this.config.itemContainerClass);
 
         if (this.config.debug) {
-            this.config.table.classList.add('iso-dom--debug');
+            this.config.grid.classList.add('iso-dom--debug');
         }
 
         this._createGrid();
@@ -401,27 +400,20 @@ class IsoDom {
      * @private
      */
     _createGrid() {
-        let bodyNode = document.createElement('tbody');
-
-        for (let row = 0; row < this.config.rows; row++) {
-            let rowNode = document.createElement('tr');
-            rowNode.classList.add(this.config.rowClass);
-
-            for (let col = 0; col < this.config.columns; col++) {
-                let columnNode = document.createElement('td');
-                columnNode.classList.add(this.config.columnClass);
-                columnNode.__isodomcell__ = new IsoDomCell(this, columnNode, col, row);
-                this._mapCell(columnNode.__isodomcell__);
+        for (let y = 0; y < this.config.rows; y++) {
+            for (let x = 0; x < this.config.columns; x++) {
+                const node = document.createElement('div');
+                node.classList.add(this.config.columnClass);
+                node.setAttribute('row', y);
+                node.setAttribute('column', x);
+                node.__isodomcell__ = new IsoDomCell(this, node, x, y);
+                this._mapCell(node.__isodomcell__);
 
                 // Call on cell created user callback
-                this.config.cellCreated(columnNode, columnNode.__isodomcell__, this);
-
-                rowNode.appendChild(columnNode);
+                this.config.cellCreated(node, node.__isodomcell__, this);
+                this.config.grid.appendChild(node);
             }
-            bodyNode.appendChild(rowNode);
         }
-
-        this.config.table.appendChild(bodyNode);
     }
 
     /**
