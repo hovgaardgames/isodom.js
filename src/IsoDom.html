@@ -8,11 +8,7 @@
 </head>
 <body style="zoom: 0.7;">
 
-<div style="position: absolute; top: 0; left: 0; width: 80%; height: 80%; border: 2px solid red; overflow: auto;">
-    <div id="grid"></div>
-    <div id="objectContainer"></div>
-</div>
-
+<div id="gridContainer" style="position: absolute; top: 0; left: 0; width: 80%; height: 80%; border: 2px solid red; overflow: auto;"></div>
 
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 <script src="IsoDom.js" type="application/javascript"></script>
@@ -31,8 +27,7 @@
 
     let iso = new IsoDom({
         debug: true,
-        grid: document.getElementById('grid'),
-        itemContainer: document.getElementById('objectContainer'),
+        target: document.getElementById('gridContainer'),
         columns: 20,
         rows: 21,
         cellSize: [187, 187],
