@@ -206,8 +206,18 @@ class IsoDom {
                 // Do nothing
             },
             cellPosition(cell) {
-                // TODO using jQuery
-                return $(cell.el).position();
+                let rect = cell.el.getBoundingClientRect();
+                let scrollTop = document.documentElement.scrollTop?
+                    document.documentElement.scrollTop:document.body.scrollTop;
+                let scrollLeft = document.documentElement.scrollLeft?
+                    document.documentElement.scrollLeft:document.body.scrollLeft;
+
+                let pos = {
+                    top: rect.top + scrollTop,
+                    left: rect.left + scrollLeft
+                };
+
+                return pos;
             },
         };
 
