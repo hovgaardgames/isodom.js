@@ -180,6 +180,20 @@ class IsoDomItem {
         this.el.style.top = `${position.top}px`;
         this.el.style.left = `${position.left}px`;
     }
+
+    /**
+     * Mount item to DOM.
+     */
+    mount() {
+        this.iso.mountItem(this);
+    }
+
+    /**
+     * Remove item from DOM.
+     */
+    unmount() {
+        this.iso.unmountItem(this);
+    }
 }
 
 class IsoDom {
@@ -273,8 +287,17 @@ class IsoDom {
         this.assertItemPlacement(item, x, y, false);
         const cell = this.cell(x, y);
 
-        this._mountItem(item);
+        this.mountItem(item);
         this._mapItemToCells(item, cell);
+    }
+
+    /**
+     * Remove item from grid.
+     * @param {IsoDomItem} item
+     */
+    removeItem(item) {
+        this._unmapItemFromCells(item);
+        this.unmountItem(item);
     }
 
     /**
@@ -517,10 +540,9 @@ class IsoDom {
     /**
      * Mount item into DOM.
      * @param {IsoDomItem} item
-     * @private
      * @returns {IsoDomItem}
      */
-    _mountItem(item) {
+    mountItem(item) {
         if (item.el) {
             return item;
         }
@@ -531,6 +553,18 @@ class IsoDom {
         item.setElement(node);
 
         return item;
+    }
+
+    /**
+     * Remove item from DOM.
+     * @param {IsoDomItem} item
+     */
+    unmountItem(item) {
+        if (!item.el) {
+            return;
+        }
+
+        item.el.parentNode.removeChild(item.el);
     }
 
     /**
@@ -569,7 +603,7 @@ class IsoDom {
         const cells = this.findItemCells(item);
 
         if (!cells.length) {
-            throw new Error(`Item "${item.name}" is not in the DOM.`);
+            return;
         }
 
         cells.forEach(cell => cell.setItem(null, null));

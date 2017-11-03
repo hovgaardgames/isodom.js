@@ -8,23 +8,16 @@
 </head>
 <body style="zoom: 0.7;">
 
+<div class="actions">
+    <button class="actions__action" id="newItem">+</button>
+</div>
+
 <div id="gridContainer" style="position: absolute; top: 0; left: 0; width: 80%; height: 80%; border: 2px solid red; overflow: auto;"></div>
 
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 <script src="IsoDom.js" type="application/javascript"></script>
 <script src="items.js" type="application/javascript"></script>
 <script type="application/javascript">
-    let dragging = null;
-
-    document.body.onkeydown = function (e) {
-        // ESC
-       if (e.keyCode === 27 && dragging) {
-           // Cancel drag and drop
-           dragging.update();
-           dragging = null;
-       }
-    };
-
     let iso = new IsoDom({
         debug: true,
         target: document.getElementById('gridContainer'),
@@ -49,12 +42,15 @@
             node.onclick = function () {
                 if (!dragging) {
                     if (cell.item) {
-                        dragging = cell.getRootCell();
-                        dragging.item.el.style.zIndex = '99999';
+                        dragging = cell.getRootCell().item;
+                        dragCell = cell;
+                        draggingOrientation = dragging.orientation;
+                        dragging.el.style.zIndex = '99999';
                     }
                 } else {
-                    iso.moveItem(dragging.item, cell.x, cell.y);
+                    iso.moveItem(dragging, cell.x, cell.y);
                     dragging = null;
+                    draggingOrientation = null;
                     iso.draw();
                 }
             };
@@ -66,24 +62,60 @@
                     return false;
                 }
 
-                dragging.item.rotate();
+                dragging.rotate();
 
                 return false;
             };
 
             node.onmouseover = function () {
                 if (dragging) {
-                    if (iso.isOutOfBounds(dragging.item, cell.x, cell.y)) {
+                    if (iso.isOutOfBounds(dragging, cell.x, cell.y)) {
                         return;
                     }
 
-                    dragging.item.positionOnCell(cell);
+                    dragging.positionOnCell(cell);
                 }
             };
         },
         items: items
     });
 
+    let dragging = null;
+    let dragCell = null;
+    let draggingOrientation = null;
+    let isNewItem = false;
+
+    document.body.onkeydown = function (e) {
+        // ESC
+        if (e.keyCode === 27 && dragging) {
+            if (isNewItem) {
+                dragging.unmount();
+            } else {
+                // Cancel drag and drop
+                dragging.orientation = draggingOrientation;
+                dragging.update(); // restore z-index
+
+                if (dragCell) {
+                    // Restore z-index
+                    dragCell.update();
+                }
+            }
+
+            dragging = null;
+            dragCell = null;
+            draggingOrientation = null;
+            isNewItem = false;
+        }
+    };
+
+    document.getElementById('newItem').onclick = function (e) {
+        const newItem = new IsoDomItem('closet1', iso);
+        newItem.mount();
+        newItem.el.style.zIndex = '99999';
+
+        isNewItem = true;
+        dragging = newItem;
+    };
 
     // TEST 1
     // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_SE }), 4, 0);
