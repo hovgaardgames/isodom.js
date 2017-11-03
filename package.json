@@ -1,0 +1,24 @@
+{
+  "name": "isodom.js",
+  "version": "1.0.0",
+  "description": "isodom.js is an isometric DOM-based grid/item system for games",
+  "main": "index.js",
+  "scripts": {
+    "dev": "./node_modules/.bin/webpack-dev-server --open",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hovgaardgames/isodom.js.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hovgaardgames/isodom.js/issues"
+  },
+  "homepage": "https://github.com/hovgaardgames/isodom.js#readme",
+  "devDependencies": {
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  }
+}
