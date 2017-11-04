@@ -208,6 +208,7 @@ class IsoDom {
             debug: false,
             /** @type HTMLElement */
             target: null,
+            scrollContainer: null,
             items: {},
             cellSize: [100, 100],
             rows: 10,
@@ -225,7 +226,7 @@ class IsoDom {
                 let top = 0;
                 let left = 0;
 
-                if (this.target === document.body) {
+                if (this.config.scrollContainer === document.body) {
                     const body = document.body;
                     const doc = document.documentElement;
 
@@ -238,8 +239,8 @@ class IsoDom {
                     top = rect.top + scrollTop + clientTop;
                     left = rect.left + scrollLeft + clientLeft;
                 } else {
-                    top = rect.top + this.target.scrollTop;
-                    left = rect.left + this.target.scrollLeft;
+                    top = rect.top + this.config.scrollContainer.scrollTop;
+                    left = rect.left + this.config.scrollContainer.scrollLeft;
                 }
 
                 return {
@@ -259,6 +260,11 @@ class IsoDom {
         };
 
         Object.assign(this.config, config);
+
+        // Set scroll container
+        if (!this.config.scrollContainer) {
+            this.config.scrollContainer = this.config.target;
+        }
 
         // Validate grid element
         if (!this.config.target || !this.config.target.nodeName) {
