@@ -7,26 +7,46 @@
     border-collapse: collapse;
 
     /* TODO calculate? */
-    margin-left: 462px;
-    margin-top: 100px;
+    margin-left: 890px;
 }
 
 .iso-dom__column {
     text-align: center;
+    vertical-align: middle;
+    float: left;
 }
 
 .iso-dom.iso-dom--debug .iso-dom__column {
     border: 1px solid red;
 }
 
-/* TODO img style should be scoped? rather should be a class because it might not be an img? */
-img {
+.iso-dom-item {
     position: absolute;
-    transform: scale(0.55);
+}
+
+/* TODO img style should be scoped? rather should be a class because it might not be an img? */
+
+/* DEV STUFF BELOW */
+
+#objectContainer {
+    position: absolute;
+    top: 92px;
+    left: -144px;
     pointer-events: none;
 }
 
-/* DEV STUFF BELOW */
+#grid .iso-dom__column {
+    width: 100px;
+    height: 100px;
+}
+
+img.iso-dom-item {
+    pointer-events: none;
+}
+
+.iso-dom-item img {
+    pointer-events: none;
+}
 
 .actions {
     position: fixed;
@@ -43,120 +63,3 @@ img {
     border-radius: 5px;
     cursor: pointer;
 }
-
-img[data-name='tv'] {
-    margin-top: -308px;
-    margin-left: -80px;
-}
-
-img[data-name='tnc'][data-orientation='SW'] {
-    margin-left: -190px;
-    margin-top: -168px;
-}
-
-img[data-name='tnc'][data-orientation='NE'] {
-    margin-left: -213px;
-    margin-top: -146px;
-}
-
-img[data-name='tnc'][data-orientation='SE'], img[data-name='tnc'][data-orientation='NW'] {
-    margin-left: -364px;
-    margin-top: -170px;
-}
-
-img[data-name='tnc'][data-orientation='NW'] {
-    margin-left: -325px;
-    margin-top: -150px;
-}
-
-img[data-name='whiteboard'] {
-    margin-top: -264px;
-    margin-left: -92px;
-}
-
-img[data-name='whiteboard'][data-orientation='NW'] {
-    margin-top: -265px;
-    margin-left: -163px;
-}
-
-img[data-name='glass-wall'] {
-    margin-left: -155px;
-    margin-top: -369px;
-}
-
-img[data-name='bench-red'][data-orientation='SE'], img[data-name='bench-red'][data-orientation='NW'] {
-    margin-top: -125px;
-    margin-left: -190px;
-}
-
-img[data-name='bench-red'][data-orientation='NE'], img[data-name='bench-red'][data-orientation='SW'] {
-    margin-top: -129px;
-    margin-left: -120px;
-}
-
-img[data-name='glass-wall-corner'] {
-    margin-left: -156px;
-    margin-top: -400px;
-}
-
-img[data-name='glass-wall-corner'][data-orientation='NE'] {
-    margin-left: -123px;
-    margin-top: -379px;
-}
-
-img[data-name='wall-t'] {
-    margin-left: -155px;
-    margin-top: -369px;
-}
-
-img[data-name='meeting-table'][data-orientation='SW'] {
-    margin-left: -471px;
-    margin-top: -228px;
-}
-
-img[data-name='meeting-table'][data-orientation='NW'] {
-    margin-left: -607px;
-    margin-top: -228px;
-}
-
-img[data-name='reception'] {
-    margin-left: -322px;
-    margin-top: -136px;
-}
-
-img[data-name='desk'][data-orientation='NE'] {
-    margin-top: -227px;
-    margin-left: -154px;
-}
-
-img[data-name='desk'][data-orientation='NW'] {
-    margin-top: -227px;
-    margin-left: -195px;
-}
-
-img[data-name='desk'][data-orientation='SE'] {
-    margin-top: -206px;
-    margin-left: -160px;
-}
-
-img[data-name='desk'][data-orientation='SW']{
-    margin-top: -201px;
-    margin-left: -215px;
-}
-
-img[data-name='closet'][data-orientation='SW']{
-    margin-top: -334px;
-    margin-left: -181px;
-}
-
-img[data-name='closet'][data-orientation='NE'] {
-    margin-top: -329px;
-    margin-left: -172px;
-}
-
-img[data-name='closet'][data-orientation='SE'], img[data-name='closet'][data-orientation='NW'] {
-    margin-top: -332px;
-    margin-left: -233px;
-}
-
-
