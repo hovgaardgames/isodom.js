@@ -14,107 +14,81 @@
 
 <div id="gridContainer" style="position: absolute; top: 0; left: 0; width: 80%; height: 80%; border: 2px solid red; overflow: auto;"></div>
 
-<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 <script src="IsoDom.js" type="application/javascript"></script>
+<script src="plugins/DragAndDrop.js" type="application/javascript"></script>
 <script src="items.js" type="application/javascript"></script>
+
 <script type="application/javascript">
+    let dragAndDrop = new IsoDomDragAndDrop();
     let iso = new IsoDom({
         debug: true,
+        plugins: [dragAndDrop],
         target: document.getElementById('gridContainer'),
         columns: 20,
         rows: 21,
         cellSize: [187, 187],
-//        createItem(item) {
-//            if (item.name === 'desk') {
-//                const root = document.createElement('div');
-//                const img = document.createElement('img');
-//                root.appendChild(img);
-//                item.img = img;
-//                return root;
-//            }
-//
-//            return document.createElement('img');
-//        },
-//        updateItem(item) {
-//            (item.img || item.el).setAttribute('src', item.image());
-//        },
-        cellCreated(node, cell, iso) {
-            node.onclick = function () {
-                if (!dragging) {
-                    if (cell.item) {
-                        dragging = cell.getRootCell().item;
-                        dragCell = cell;
-                        draggingOrientation = dragging.orientation;
-                        dragging.el.style.zIndex = '99999';
+        events: {
+            cellCreated(node, cell) {
+                node.addEventListener('mouseover', () => {
+                    if (dragAndDrop.isDragging()) {
+                        let destination = cell;
+
+                        if (iso.isOutOfBounds(dragAndDrop.item, cell.x, cell.y)) {
+                            destination = dragAndDrop.closestInBoundCell(cell);
+                            return;
+                        }
+
+                        dragAndDrop.setDestination(destination);
                     }
-                } else {
-                    iso.moveItem(dragging, cell.x, cell.y);
-                    dragging = null;
-                    draggingOrientation = null;
-                    iso.draw();
-                }
-            };
+                });
 
-            node.oncontextmenu = function (event) {
-                event.preventDefault();
+                node.addEventListener('click', () => {
+                    if (dragAndDrop.isDragging()) {
+                        dragAndDrop.commit();
+                    } else if (cell.item) {
+                        dragAndDrop.start(cell.item);
+                    }
+                });
 
-                if (!dragging) {
+                node.addEventListener('contextmenu', (event) => {
+                    event.preventDefault();
+
+                    if (!dragAndDrop.isDragging()) {
+                        return false;
+                    }
+
+                    dragAndDrop.item.rotate();
                     return false;
-                }
-
-                dragging.rotate();
-
-                return false;
-            };
-
-            node.onmouseover = function () {
-                if (dragging) {
-                    if (iso.isOutOfBounds(dragging, cell.x, cell.y)) {
-                        return;
-                    }
-
-                    dragging.positionOnCell(cell);
-                }
-            };
+                });
+            },
         },
+        // createItem(item) {
+        //     if (item.name === 'desk') {
+        //         const root = document.createElement('div');
+        //         const img = document.createElement('img');
+        //         root.appendChild(img);
+        //         item.img = img;
+        //         return root;
+        //     }
+        //
+        //     return document.createElement('img');
+        // },
+        // updateItem(item) {
+        //     (item.img || item.el).setAttribute('src', item.image());
+        // },
         items: items
     });
 
-    let dragging = null;
-    let dragCell = null;
-    let draggingOrientation = null;
-    let isNewItem = false;
-
     document.body.onkeydown = function (e) {
         // ESC
-        if (e.keyCode === 27 && dragging) {
-            if (isNewItem) {
-                dragging.unmount();
-            } else {
-                // Cancel drag and drop
-                dragging.orientation = draggingOrientation;
-                dragging.update(); // restore z-index
-
-                if (dragCell) {
-                    // Restore z-index
-                    dragCell.update();
-                }
-            }
-
-            dragging = null;
-            dragCell = null;
-            draggingOrientation = null;
-            isNewItem = false;
+        if (e.keyCode === 27 && dragAndDrop.isDragging()) {
+            dragAndDrop.cancel();
         }
     };
 
     document.getElementById('newItem').onclick = function (e) {
         const newItem = new IsoDomItem('closet1', iso);
-        newItem.mount();
-        newItem.el.style.zIndex = '99999';
-
-        isNewItem = true;
-        dragging = newItem;
+        dragAndDrop.start(newItem);
     };
 
     // TEST 1
@@ -202,10 +176,10 @@
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 14, 0);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 16, 0);
 
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SW}), 0, 0);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SW }), 0, 0);
 
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 18, 0);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 18, 1);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 18, 0);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 18, 1);
 
     //    iso.addItem(new IsoDomItem('desk', iso), 0, 2);
     //    iso.addItem(new IsoDomItem('desk', iso), 2, 2);
@@ -216,7 +190,7 @@
     //    iso.addItem(new IsoDomItem('desk', iso), 12, 2);
     //    iso.addItem(new IsoDomItem('desk', iso), 14, 2);
     //    iso.addItem(new IsoDomItem('desk', iso), 16, 2);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 18, 3);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 18, 3);
 
     iso.addItem(new IsoDomItem('glass_wall1', iso), 0, 4);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 1, 4);
@@ -236,14 +210,14 @@
     iso.addItem(new IsoDomItem('glass_wall1', iso), 15, 4);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 16, 4);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 17, 4);
-    iso.addItem(new IsoDomItem('glass_wall_corner1', iso, {orientation: IsoDom.ORIENTATION_NW}), 18, 4);
+    iso.addItem(new IsoDomItem('glass_wall_corner1', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 4);
 
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 5);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 5);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 4, 5);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 6, 5);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 8, 5);
-    iso.addItem(new IsoDomItem('table_and_chairs1', iso, {orientation: IsoDom.ORIENTATION_NE}), 12, 5);
+    iso.addItem(new IsoDomItem('table_and_chairs1', iso, { orientation: IsoDom.ORIENTATION_NE }), 12, 5);
 
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 0, 7);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NE }), 2, 7);
@@ -256,24 +230,24 @@
 
     iso.addItem(new IsoDomItem('meeting_table1', iso), 11, 10);
 
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 20);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 19);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 18);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 17);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 16);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 17, 15);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 20);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 19);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 18);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 17);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 16);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 17, 15);
     iso.addItem(new IsoDomItem('wall_t1', iso), 17, 14);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 18, 14);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 19);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 17);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 18, 15);
 
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 20);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 19);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 18);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 17);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 16);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 14, 15);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 20);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 19);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 18);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 17);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 16);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 14, 15);
     //    iso.addItem(new IsoDomItem('glass_wall1', iso), 13, 14);
     iso.addItem(new IsoDomItem('wall_t1', iso), 14, 14);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 15, 14);
@@ -281,12 +255,12 @@
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 17);
     //    iso.addItem(new IsoDomItem('desk', iso, { orientation: IsoDom.ORIENTATION_NW }), 15, 15);
 
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 20);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 19);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 18);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 17);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 16);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 9, 15);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 20);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 19);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 18);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 17);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 16);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 9, 15);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 8, 14);
     iso.addItem(new IsoDomItem('wall_t1', iso), 9, 14);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 10, 14);
@@ -304,11 +278,11 @@
 
     //    iso.addItem(new IsoDomItem('meeting_table1', iso, { orientation: IsoDom.ORIENTATION_NW }), 5, 15);
 
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 10);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 11);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 12);
-    iso.addItem(new IsoDomItem('glass_wall1', iso, {orientation: IsoDom.ORIENTATION_SE}), 3, 13);
-    iso.addItem(new IsoDomItem('glass_wall_corner1', iso, {orientation: IsoDom.ORIENTATION_NE}), 3, 14);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 10);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 11);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 12);
+    iso.addItem(new IsoDomItem('glass_wall1', iso, { orientation: IsoDom.ORIENTATION_SE }), 3, 13);
+    iso.addItem(new IsoDomItem('glass_wall_corner1', iso, { orientation: IsoDom.ORIENTATION_NE }), 3, 14);
     iso.addItem(new IsoDomItem('glass_wall1', iso), 4, 14);
     //iso.addItem(new IsoDomItem('whiteboard2', iso, { orientation: IsoDom.ORIENTATION_NW }), 2, 10);
     //iso.addItem(new IsoDomItem('bench-red', iso, { orientation: IsoDom.ORIENTATION_NW }), 2, 12);
@@ -318,7 +292,6 @@
 
     iso.addItem(new IsoDomItem('couch_blue1', iso), 2, 0);
     //    iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_SE }), 6, 8);
-
 
     iso.draw();
 </script>

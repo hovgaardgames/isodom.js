@@ -1,3 +1,88 @@
+class IsoDomEventBus {
+    /**
+     * EventBus constructor.
+     */
+    constructor() {
+        this._listeners = {};
+    }
+
+    /**
+     * Add event listener.
+     * @param {String|Array} event
+     * @param {Function} listener
+     */
+    on(event, listener) {
+        if (typeof event === 'object') {
+            for (const index of event) {
+                this._addHandler(event[index], listener);
+            }
+        } else {
+            this._addHandler(event, listener);
+        }
+    }
+
+    /**
+     * Remove event listener.
+     * @param {String|Array} event
+     * @param {Function} listener
+     */
+    off(event, listener) {
+        if (typeof event === 'object') {
+            for (const index in event) {
+                this._removeHandler(event[index], listener);
+            }
+        } else {
+            this._removeHandler(event, listener);
+        }
+    }
+
+    /**
+     * Emit event.
+     * @param {String} event
+     * @param {*} args
+     */
+    emit(event, ...args) {
+        if (!this._listeners[event]) {
+            return;
+        }
+
+        for (const handler in this._listeners[event]) {
+            this._listeners[event][handler](...args);
+        }
+    }
+
+    /**
+     * Add event handler.
+     * @param {String} event
+     * @param {Function} listener
+     * @private
+     */
+    _addHandler(event, listener) {
+        if (!this._listeners[event]) {
+            this._listeners[event] = [];
+        }
+
+        this._listeners[event].push(listener);
+    }
+
+    /**
+     * Remove event handler.
+     * @param {String} event
+     * @param {Function} listener
+     * @private
+     */
+    _removeHandler(event, listener) {
+        if (!this._listeners[event]) {
+            return;
+        }
+
+        const index = this._listeners[event].indexOf(listener);
+        if (index >= 0) {
+            this._listeners[event].splice(index, 1);
+        }
+    }
+}
+
 class IsoDomCell {
     /**
      * Create new instance of IsoDomCell.
@@ -116,6 +201,22 @@ class IsoDomItem {
     }
 
     /**
+     * Get item cells.
+     * @returns {IsoDomCell[]}
+     */
+    cells() {
+        return this.iso.findItemCells(this);
+    }
+
+    /**
+     * Get item root cell.
+     * @returns {IsoDomCell|undefined}
+     */
+    rootCell() {
+        return this.iso.findItemCells(this).find(cell => cell.isItemRoot());
+    }
+
+    /**
      * Get image source.
      * @returns {*|HTMLImageElement}
      */
@@ -128,7 +229,12 @@ class IsoDomItem {
      */
     update() {
         if (this.el) {
-            this.iso.config.updateItem(this);
+            if (typeof this.defaults.update === 'function') {
+                this.defaults.update(this);
+            } else {
+                this.iso.config.updateItem(this);
+            }
+
             this.el.setAttribute('data-name', this.name);
             this.el.setAttribute('data-orientation', this.orientation);
         }
@@ -201,6 +307,7 @@ class IsoDom {
      * Create new instance of IsoDom.
      */
     constructor(config = {}) {
+        this.events = new IsoDomEventBus();
         this.cells = {};
         this.grid = null;
         this.itemContainer = null;
@@ -217,16 +324,15 @@ class IsoDom {
             itemClass: 'iso-dom-item',
             columnClass: 'iso-dom__column',
             itemContainerClass: 'iso-dom-items',
-            cellCreated(node, cell, iso) {
-                // Do nothing
-            },
+            plugins: [],
+            events: {},
             cellPosition(cell) {
                 const rect = cell.el.getBoundingClientRect();
 
                 let top = 0;
                 let left = 0;
 
-                if (this.config.scrollContainer === document.body) {
+                if (this.scrollContainer === document.body) {
                     const body = document.body;
                     const doc = document.documentElement;
 
@@ -239,8 +345,8 @@ class IsoDom {
                     top = rect.top + scrollTop + clientTop;
                     left = rect.left + scrollLeft + clientLeft;
                 } else {
-                    top = rect.top + this.config.scrollContainer.scrollTop;
-                    left = rect.left + this.config.scrollContainer.scrollLeft;
+                    top = rect.top + this.scrollContainer.scrollTop;
+                    left = rect.left + this.scrollContainer.scrollLeft;
                 }
 
                 return {
@@ -265,6 +371,16 @@ class IsoDom {
         if (!this.config.scrollContainer) {
             this.config.scrollContainer = this.config.target;
         }
+
+        // Register events
+        for (let eventName in this.config.events) {
+            this.events.on(eventName, this.config.events[eventName]);
+        }
+
+        // Install plugins
+        this.config.plugins.forEach(plugin => {
+            plugin.install(this);
+        });
 
         // Validate grid element
         if (!this.config.target || !this.config.target.nodeName) {
@@ -373,13 +489,13 @@ class IsoDom {
         }
 
         // Collect all cells and keep only root item cells
-        const boxes = this._itemsInArea(0, 0, this.config.columns, this.config.rows);
+        const boxes = this.itemsInArea(0, 0, this.config.columns, this.config.rows);
 
         // Set cell index
         const setIndex = box => {
             const limiters = [];
 
-            const zones = this._itemsInArea(0, 0, box.cell.x + box.cell.item.getWidth(), box.cell.y + box.cell.item.getHeight());
+            const zones = this.itemsInArea(0, 0, box.cell.x + box.cell.item.getWidth(), box.cell.y + box.cell.item.getHeight());
             for (const zoneIndex in zones) {
                 const zone = zones[zoneIndex];
                 if (zone.cell.item !== box.cell.item && zone.cell.z) {
@@ -422,7 +538,6 @@ class IsoDom {
      * Find IsoDomItem root cell.
      * @param {IsoDomItem} item
      * @returns {IsoDomCell[]|null}
-     * @private
      */
     findItemCells(item) {
         const cells = [];
@@ -434,51 +549,6 @@ class IsoDom {
         }
 
         return cells;
-    }
-
-    /**
-     * Create IsoDom grid.
-     * @private
-     */
-    _init() {
-        // Create main grid
-        const grid = document.createElement('div');
-        grid.classList.add(this.config.gridClass);
-        grid.style.width = (this.config.columns * this.config.cellSize[0]) + ((this.config.columns + this.config.cellSize[0]) / 2) + 'px';
-        grid.style.height = (this.config.rows * this.config.cellSize[1]) + ((this.config.columns + this.config.cellSize[1]) / 2) + 'px';
-
-        if (this.config.debug) {
-            grid.classList.add(`${this.config.gridClass}--debug`);
-        }
-
-        // Create item container
-        const itemContainer = document.createElement('div');
-        itemContainer.classList.add(this.config.itemContainerClass);
-
-        for (let y = 0; y < this.config.rows; y++) {
-            for (let x = 0; x < this.config.columns; x++) {
-                const node = document.createElement('div');
-                node.classList.add(this.config.columnClass);
-                node.setAttribute('row', y);
-                node.setAttribute('column', x);
-                node.style.width = this.config.cellSize[0] + "px";
-                node.style.height = this.config.cellSize[1] + "px";
-
-                node.__isodomcell__ = new IsoDomCell(this, node, x, y);
-                this._mapCell(node.__isodomcell__);
-
-                // Call on cell created user callback
-                this.config.cellCreated(node, node.__isodomcell__, this);
-                grid.appendChild(node);
-            }
-        }
-
-        // Add grid and item container to DOM
-        this.config.target.appendChild(grid);
-        this.config.target.appendChild(itemContainer);
-
-        this.grid = grid;
-        this.itemContainer = itemContainer;
     }
 
     /**
@@ -553,7 +623,7 @@ class IsoDom {
             return item;
         }
 
-        const node = this.config.createItem(item);
+        const node = item.defaults.create ? item.defaults.create(item) : this.config.createItem(item);
         node.classList.add(this.config.itemClass);
         this.itemContainer.appendChild(node);
         item.setElement(node);
@@ -571,6 +641,75 @@ class IsoDom {
         }
 
         item.el.parentNode.removeChild(item.el);
+    }
+
+    /**
+     * Array of cell boxes.
+     * @param {Number} startX
+     * @param {Number} startY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @returns {Array}
+     */
+    itemsInArea(startX, startY, endX, endY) {
+        const box = [];
+
+        for (let row = startY; row < endY; row++) {
+            for (let col = startX; col < endX; col++) {
+                const cell = this.cell(col, row);
+                if (cell.isItemRoot()) {
+                    box.push({ x: col, y: row, cell: cell, item: cell.item });
+                }
+            }
+        }
+
+        return box;
+    }
+
+    /**
+     * Create IsoDom grid.
+     * @private
+     */
+    _init() {
+        // Create main grid
+        const grid = document.createElement('div');
+        grid.classList.add(this.config.gridClass);
+        grid.style.width = (this.config.columns * this.config.cellSize[0]) + ((this.config.columns + this.config.cellSize[0]) / 2) + 'px';
+        grid.style.height = (this.config.rows * this.config.cellSize[1]) + ((this.config.columns + this.config.cellSize[1]) / 2) + 'px';
+
+        if (this.config.debug) {
+            grid.classList.add(`${this.config.gridClass}--debug`);
+        }
+
+        // Create item container
+        const itemContainer = document.createElement('div');
+        itemContainer.classList.add(this.config.itemContainerClass);
+
+        for (let y = 0; y < this.config.rows; y++) {
+            for (let x = 0; x < this.config.columns; x++) {
+                const node = document.createElement('div');
+                node.classList.add(this.config.columnClass);
+                node.setAttribute('row', y);
+                node.setAttribute('column', x);
+                node.style.width = this.config.cellSize[0] + "px";
+                node.style.height = this.config.cellSize[1] + "px";
+
+                node.__isodomcell__ = new IsoDomCell(this, node, x, y);
+                this._mapCell(node.__isodomcell__);
+
+                // Call on cell created user callback
+                this.events.emit('cellCreated', node, node.__isodomcell__, this);
+
+                grid.appendChild(node);
+            }
+        }
+
+        // Add grid and item container to DOM
+        this.config.target.appendChild(grid);
+        this.config.target.appendChild(itemContainer);
+
+        this.grid = grid;
+        this.itemContainer = itemContainer;
     }
 
     /**
@@ -613,30 +752,6 @@ class IsoDom {
         }
 
         cells.forEach(cell => cell.setItem(null, null));
-    }
-
-    /**
-     * Array of cell boxes.
-     * @param {Number} startX
-     * @param {Number} startY
-     * @param {Number} endX
-     * @param {Number} endY
-     * @returns {Array}
-     * @private
-     */
-    _itemsInArea(startX, startY, endX, endY) {
-        const box = [];
-
-        for (let row = startY; row < endY; row++) {
-            for (let col = startX; col < endX; col++) {
-                const cell = this.cell(col, row);
-                if (cell.isItemRoot()) {
-                    box.push({ x: col, y: row, cell: cell });
-                }
-            }
-        }
-
-        return box;
     }
 
     /**
