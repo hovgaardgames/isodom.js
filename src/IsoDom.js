@@ -1,88 +1,3 @@
-class IsoDomEventBus {
-    /**
-     * EventBus constructor.
-     */
-    constructor() {
-        this._listeners = {};
-    }
-
-    /**
-     * Add event listener.
-     * @param {String|Array} event
-     * @param {Function} listener
-     */
-    on(event, listener) {
-        if (typeof event === 'object') {
-            for (const index of event) {
-                this._addHandler(event[index], listener);
-            }
-        } else {
-            this._addHandler(event, listener);
-        }
-    }
-
-    /**
-     * Remove event listener.
-     * @param {String|Array} event
-     * @param {Function} listener
-     */
-    off(event, listener) {
-        if (typeof event === 'object') {
-            for (const index in event) {
-                this._removeHandler(event[index], listener);
-            }
-        } else {
-            this._removeHandler(event, listener);
-        }
-    }
-
-    /**
-     * Emit event.
-     * @param {String} event
-     * @param {*} args
-     */
-    emit(event, ...args) {
-        if (!this._listeners[event]) {
-            return;
-        }
-
-        for (const handler in this._listeners[event]) {
-            this._listeners[event][handler](...args);
-        }
-    }
-
-    /**
-     * Add event handler.
-     * @param {String} event
-     * @param {Function} listener
-     * @private
-     */
-    _addHandler(event, listener) {
-        if (!this._listeners[event]) {
-            this._listeners[event] = [];
-        }
-
-        this._listeners[event].push(listener);
-    }
-
-    /**
-     * Remove event handler.
-     * @param {String} event
-     * @param {Function} listener
-     * @private
-     */
-    _removeHandler(event, listener) {
-        if (!this._listeners[event]) {
-            return;
-        }
-
-        const index = this._listeners[event].indexOf(listener);
-        if (index >= 0) {
-            this._listeners[event].splice(index, 1);
-        }
-    }
-}
-
 class IsoDomCell {
     /**
      * Create new instance of IsoDomCell.
@@ -307,7 +222,7 @@ class IsoDom {
      * Create new instance of IsoDom.
      */
     constructor(config = {}) {
-        this.events = new IsoDomEventBus();
+        this._listeners = {};
         this.cells = {};
         this.grid = null;
         this.itemContainer = null;
@@ -374,7 +289,7 @@ class IsoDom {
 
         // Register events
         for (let eventName in this.config.events) {
-            this.events.on(eventName, this.config.events[eventName]);
+            this.on(eventName, this.config.events[eventName]);
         }
 
         // Install plugins
@@ -388,6 +303,10 @@ class IsoDom {
         }
 
         this._init();
+
+        this.on(['itemAdded', 'itemRemoved', 'itemMoved'], () => {
+            this.emit('itemsChanged', this);
+        });
     }
 
     /**
@@ -412,8 +331,7 @@ class IsoDom {
         this.mountItem(item);
         this._mapItemToCells(item, cell);
 
-        this.events.emit('itemAdded', item, cell, this);
-        this.events.emit('itemsChanged', this);
+        this.emit('itemAdded', item, cell, this);
     }
 
     /**
@@ -425,8 +343,7 @@ class IsoDom {
         this.unmountItem(item);
         item.setElement(null);
 
-        this.events.emit('itemRemoved', item, this);
-        this.events.emit('itemsChanged', this);
+        this.emit('itemRemoved', item, this);
     }
 
     /**
@@ -443,8 +360,7 @@ class IsoDom {
         iso._unmapItemFromCells(item);
         iso._mapItemToCells(item, cell);
 
-        this.events.emit('itemMoved', item, cell, fromCell, this);
-        this.events.emit('itemsChanged', this);
+        this.emit('itemMoved', item, cell, fromCell, this);
     }
 
     /**
@@ -543,6 +459,8 @@ class IsoDom {
         for (const cell in this.cells) {
             this.cells[cell].update();
         }
+
+        this.emit('gridUpdated', this);
     }
 
     /**
@@ -678,6 +596,51 @@ class IsoDom {
     }
 
     /**
+     * Add event listener.
+     * @param {String|Array} event
+     * @param {Function} listener
+     */
+    on(event, listener) {
+        if (typeof event === 'object') {
+            for (const index of event) {
+                this._addHandler(event[index], listener);
+            }
+        } else {
+            this._addHandler(event, listener);
+        }
+    }
+
+    /**
+     * Remove event listener.
+     * @param {String|Array} event
+     * @param {Function} listener
+     */
+    off(event, listener) {
+        if (typeof event === 'object') {
+            for (const index in event) {
+                this._removeHandler(event[index], listener);
+            }
+        } else {
+            this._removeHandler(event, listener);
+        }
+    }
+
+    /**
+     * Emit event.
+     * @param {String} event
+     * @param {*} args
+     */
+    emit(event, ...args) {
+        if (!this._listeners[event]) {
+            return;
+        }
+
+        for (const handler in this._listeners[event]) {
+            this._listeners[event][handler](...args);
+        }
+    }
+
+    /**
      * Create IsoDom grid.
      * @private
      */
@@ -709,7 +672,7 @@ class IsoDom {
                 this._mapCell(node.__isodomcell__);
 
                 // Call on cell created user callback
-                this.events.emit('cellCreated', node, node.__isodomcell__, this);
+                this.emit('cellCreated', node, node.__isodomcell__, this);
 
                 grid.appendChild(node);
             }
@@ -763,6 +726,37 @@ class IsoDom {
         }
 
         cells.forEach(cell => cell.setItem(null, null));
+    }
+
+    /**
+     * Add event handler.
+     * @param {String} event
+     * @param {Function} listener
+     * @private
+     */
+    _addHandler(event, listener) {
+        if (!this._listeners[event]) {
+            this._listeners[event] = [];
+        }
+
+        this._listeners[event].push(listener);
+    }
+
+    /**
+     * Remove event handler.
+     * @param {String} event
+     * @param {Function} listener
+     * @private
+     */
+    _removeHandler(event, listener) {
+        if (!this._listeners[event]) {
+            return;
+        }
+
+        const index = this._listeners[event].indexOf(listener);
+        if (index >= 0) {
+            this._listeners[event].splice(index, 1);
+        }
     }
 
     /**
