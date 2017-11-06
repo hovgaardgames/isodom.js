@@ -66,6 +66,8 @@ class IsoDomDragAndDrop {
             this.item.unmount();
         }
 
+        this.isoDom.events.emit('dragEnd', true, this); // canceled = true
+
         this._reset();
     }
 
@@ -81,6 +83,8 @@ class IsoDomDragAndDrop {
         this.item = item;
         this.initialOrientation = item.orientation;
         item.el.style.zIndex = '99999';
+
+        this.isoDom.events.emit('dragStart', this.item, this);
     }
 
     /**
@@ -94,7 +98,8 @@ class IsoDomDragAndDrop {
         this.isoDom.moveItem(this.item, this.destinationCell.x, this.destinationCell.y);
         this.isoDom.draw();
 
-        this.isoDom.events.emit('itemDrop', this.item, this.destinationCell);
+        this.isoDom.events.emit('itemDrop', this.item, this.destinationCell, this);
+        this.isoDom.events.emit('dragEnd', false, this); // canceled = false
 
         this._reset();
     }
@@ -105,6 +110,12 @@ class IsoDomDragAndDrop {
      */
     install(isoDom) {
         this.isoDom = isoDom;
+
+        this.isoDom.events.on('itemRemoved', item => {
+            if (item === this.item) {
+                this.cancel();
+            }
+        });
     }
 
     /**
