@@ -2,9 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>IsoDom Example</title>
 
-    <link rel="stylesheet" href="IsoDom.css">
+    <link rel="stylesheet" href="../src/IsoDom.css">
+
+    <style>
+        #objectContainer {
+            position: absolute;
+            top: 92px;
+            left: -144px;
+            pointer-events: none;
+        }
+
+        #grid .iso-dom__column {
+            width: 100px;
+            height: 100px;
+        }
+
+        img.iso-dom-item {
+            pointer-events: none;
+        }
+
+        .iso-dom-item img {
+            pointer-events: none;
+        }
+
+        .actions {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 9999999;
+        }
+
+        .actions__action {
+            background: royalblue;
+            color: #ffffff;
+            font-size: 35px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body style="zoom: 0.7;">
 
@@ -14,8 +52,9 @@
 
 <div id="gridContainer" style="position: absolute; top: 0; left: 0; width: 80%; height: 80%; border: 2px solid red; overflow: auto;"></div>
 
-<script src="IsoDom.js" type="application/javascript"></script>
-<script src="plugins/DragAndDrop.js" type="application/javascript"></script>
+<script src="../src/IsoDom.js" type="application/javascript"></script>
+<script src="../src/plugins/DragAndDrop.js" type="application/javascript"></script>
+
 <script src="items.js" type="application/javascript"></script>
 
 <script type="application/javascript">
@@ -85,11 +124,11 @@
         }
     });
 
-    document.getElementById('newItem').onclick = (e) => {
+    document.getElementById('newItem').addEventListener('click', e => {
         e.preventDefault();
         const newItem = new IsoDomItem('closet1', iso);
         dragAndDrop.start(newItem);
-    };
+    });
 
     // TEST 1
     // iso.addItem(new IsoDomItem('closet1', iso, { orientation: IsoDom.ORIENTATION_SE }), 4, 0);
