@@ -1,6 +1,7 @@
 let items = {
     vase1: {
         id: 1,
+        name: 'vase1',
         imagePath: "assets/vase1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 100,
@@ -16,7 +17,8 @@ let items = {
     },
     vase2: {
         id: 2,
-        Path: "assets/vase2-{orientation}.png",
+        name: 'vase2',
+        imagePath: "assets/vase2-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 100,
         bonus: 0.5,
@@ -31,6 +33,7 @@ let items = {
     },
     closet1: {
         id: 3,
+        name: 'closet1',
         imagePath: "assets/closet1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 1000,
@@ -46,6 +49,7 @@ let items = {
     },
     small_closet1: {
         id: 4,
+        name: 'small_closet1',
         imagePath: "assets/small_closet1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 500,
@@ -61,6 +65,7 @@ let items = {
     },
     couch_blue1: {
         id: 5,
+        name: 'couch_blue1',
         imagePath: "assets/couch_blue1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 1500,
@@ -76,6 +81,7 @@ let items = {
     },
     bench_red1: {
         id: 6,
+        name: 'bench_red1',
         imagePath: "assets/bench_red1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 800,
@@ -91,6 +97,7 @@ let items = {
     },
     small_bench_red1: {
         id: 7,
+        name: 'small_bench_red1',
         imagePath: "assets/small_bench_red1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 400,
@@ -106,6 +113,7 @@ let items = {
     },
     meeting_table1: {
         id: 8,
+        name: 'meeting_table1',
         imagePath: "assets/meeting_table1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 3000,
@@ -121,6 +129,7 @@ let items = {
     },
     table_and_chairs1: {
         id: 9,
+        name: 'table_and_chairs1',
         imagePath: "assets/table_and_chairs1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 1500,
@@ -136,6 +145,7 @@ let items = {
     },
     watercooler1: {
         id: 10,
+        name: 'watercooler1',
         imagePath: "assets/watercooler1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 250,
@@ -151,6 +161,7 @@ let items = {
     },
     reception_area1: {
         id: 11,
+        name: 'reception_area1',
         imagePath: "assets/reception_area1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 2500,
@@ -166,6 +177,7 @@ let items = {
     },
     coffe_closet1: {
         id: 12,
+        name: 'coffe_closet1',
         imagePath: "assets/coffe_closet1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 500,
@@ -181,6 +193,7 @@ let items = {
     },
     couch_black1: {
         id: 13,
+        name: 'couch_black1',
         imagePath: "assets/couch_black1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 2000,
@@ -196,6 +209,7 @@ let items = {
     },
     couch_black2: {
         id: 14,
+        name: 'couch_black2',
         imagePath: "assets/couch_black2-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 4000,
@@ -211,6 +225,7 @@ let items = {
     },
     tv_stand1: {
         id: 15,
+        name: 'tv_stand1',
         imagePath: "assets/tv_stand1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 1200,
@@ -226,6 +241,7 @@ let items = {
     },
     whiteboard2: {
         id: 16,
+        name: 'whiteboard2',
         imagePath: "assets/whiteboard2-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 500,
@@ -241,6 +257,7 @@ let items = {
     },
     glass_wall1: {
         id: 17,
+        name: 'glass_wall1',
         imagePath: "assets/glass_wall1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
@@ -256,6 +273,7 @@ let items = {
     },
     glass_wall_corner1: {
         id: 18,
+        name: 'glass_wall_corner1',
         imagePath: "assets/glass_wall_corner1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
@@ -271,6 +289,7 @@ let items = {
     },
     glass_wall_t1: {
         id: 19,
+        name: 'glass_wall_t1',
         imagePath: "assets/glass_wall_t1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
@@ -286,6 +305,7 @@ let items = {
     },
     glass_wall_x1: {
         id: 20,
+        name: 'glass_wall_x1',
         imagePath: "assets/glass_wall_x1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
@@ -301,6 +321,7 @@ let items = {
     },
     vending_machine1: {
         id: 21,
+        name: 'vending_machine1',
         imagePath: "assets/vending_machine1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 800,
@@ -316,6 +337,7 @@ let items = {
     },
     ping_pong_table1: {
         id: 22,
+        name: 'ping_pong_table1',
         imagePath: "assets/ping_pong_table1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 700,
@@ -331,6 +353,7 @@ let items = {
     },
     large_coffee_machine1: {
         id: 23,
+        name: 'large_coffee_machine1',
         imagePath: "assets/large_coffee_machine1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 5700,
@@ -346,6 +369,7 @@ let items = {
     },
     lounge_chair1: {
         id: 24,
+        name: 'lounge_chair1',
         imagePath: "assets/lounge_chair1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 1000,
@@ -361,6 +385,7 @@ let items = {
     },
     wall1: {
         id: 25,
+        name: 'wall1',
         imagePath: "assets/wall1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
@@ -376,6 +401,7 @@ let items = {
     },
     wall_corner1: {
         id: 26,
+        name: 'wall_corner1',
         imagePath: "assets/wall_corner1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
@@ -397,6 +423,7 @@ let items = {
     },
     wall_t1: {
         id: 27,
+        name: 'wall_t1',
         imagePath: "assets/wall_t1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
@@ -412,6 +439,7 @@ let items = {
     },
     wall_x1: {
         id: 28,
+        name: 'wall_x1',
         imagePath: "assets/wall_x1-{orientation}.png",
         orientation: IsoDom.ORIENTATION_SW,
         price: 200,
