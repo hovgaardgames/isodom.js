@@ -411,6 +411,9 @@ class IsoDom {
 
         this.mountItem(item);
         this._mapItemToCells(item, cell);
+
+        this.events.emit('itemAdded', item, cell, this);
+        this.events.emit('itemsChanged', this);
     }
 
     /**
@@ -420,6 +423,10 @@ class IsoDom {
     removeItem(item) {
         this._unmapItemFromCells(item);
         this.unmountItem(item);
+        item.setElement(null);
+
+        this.events.emit('itemRemoved', item, this);
+        this.events.emit('itemsChanged', this);
     }
 
     /**
@@ -430,10 +437,14 @@ class IsoDom {
      */
     moveItem(item, x, y) {
         this.assertItemPlacement(item, x, y, true);
+        const fromCell = item.rootCell();
         const cell = this.cell(x, y);
 
         iso._unmapItemFromCells(item);
         iso._mapItemToCells(item, cell);
+
+        this.events.emit('itemMoved', item, cell, fromCell, this);
+        this.events.emit('itemsChanged', this);
     }
 
     /**

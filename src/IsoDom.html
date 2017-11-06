@@ -35,7 +35,6 @@
 
                         if (iso.isOutOfBounds(dragAndDrop.item, cell.x, cell.y)) {
                             destination = dragAndDrop.closestInBoundCell(cell);
-                            return;
                         }
 
                         dragAndDrop.setDestination(destination);
@@ -79,14 +78,15 @@
         items: items
     });
 
-    document.body.onkeydown = function (e) {
+    document.body.addEventListener('keydown', (e) => {
         // ESC
         if (e.keyCode === 27 && dragAndDrop.isDragging()) {
             dragAndDrop.cancel();
         }
-    };
+    });
 
-    document.getElementById('newItem').onclick = function (e) {
+    document.getElementById('newItem').onclick = (e) => {
+        e.preventDefault();
         const newItem = new IsoDomItem('closet1', iso);
         dragAndDrop.start(newItem);
     };
