@@ -93,6 +93,7 @@ class IsoDomItem {
      * @param {*} config
      */
     constructor(name, isoDom, config = {}) {
+        // Determine if IsoDom contains item configuration.
         this.defaults = isoDom.getItemConfig(name);
         if (!this.defaults) {
             throw new Error(`IsoDom does not contain "${name}" item configuration.`);
@@ -102,8 +103,13 @@ class IsoDomItem {
         this.iso = isoDom;
         /** @type {HTMLElement} */
         this.el = null;
-        this.orientation = config.orientation || this.defaults.orientation;
-        this.images = config.images || this.defaults.images;
+
+        Object.assign(this, config);
+
+        // Current item orientation
+        if (!this.orientation) {
+            this.orientation = config.orientation || this.defaults.orientation;
+        }
     }
 
     /**
@@ -136,7 +142,7 @@ class IsoDomItem {
      * @returns {*|HTMLImageElement}
      */
     image() {
-        return this.images[this.orientation];
+        return this.defaults.images[this.orientation];
     }
 
     /**
