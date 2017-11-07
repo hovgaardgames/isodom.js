@@ -38,13 +38,13 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 1000,
         bonus: 1,
-        size: [1, 2],
+        size: [2,1],
         tier: 1,
         images: {
             [IsoDom.ORIENTATION_NW]: {url: 'assets/closet1-1.png', offset: {top: -492, left: 80}},
             [IsoDom.ORIENTATION_NE]: {url: 'assets/closet1-2.png', offset: {top: -496, left: -81}},
             [IsoDom.ORIENTATION_SE]: {url: 'assets/closet1-3.png', offset: {top: -519, left: 74}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/closet1-4.png', offset: {top: -521, left: -81}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/closet1-4.png', offset: {top: -341, left: -95}},
         }
     },
     small_closet1: {
