@@ -260,14 +260,17 @@ class IsoDom {
                     const scrollTop = (window.pageYOffset || doc.scrollTop || body.scrollTop) / (document.body.style.zoom || 1);
                     const scrollLeft = (window.pageXOffset || doc.scrollLeft || body.scrollLeft) / (document.body.style.zoom || 1);
 
-                    const clientTop = doc.clientTop || body.clientTop || 0;
-                    const clientLeft = doc.clientLeft || body.clientLeft || 0;
-
-                    top = rect.top + scrollTop + clientTop;
-                    left = rect.left + scrollLeft + clientLeft;
+                    top = rect.top + scrollTop;
+                    left = rect.left + scrollLeft;
                 } else {
                     top = rect.top + this.scrollContainer.scrollTop;
                     left = rect.left + this.scrollContainer.scrollLeft;
+
+                    if (this.scrollContainer.style.zoom) {
+                        // For every .01 zoom level, left must be moved -2px (WebKit)
+                        const zoom = parseFloat(this.scrollContainer.style.zoom);
+                        left -= Math.round((1 - zoom) * 100) * 2;
+                    }
                 }
 
                 return {
