@@ -359,6 +359,11 @@ class IsoDom {
      * @param {Number} y
      */
     moveItem(item, x, y) {
+        if (!item.rootCell()) {
+            this.addItem(item, x, y);
+            return;
+        }
+
         this.assertItemPlacement(item, x, y, true);
         const fromCell = item.rootCell();
         const cell = this.cell(x, y);
