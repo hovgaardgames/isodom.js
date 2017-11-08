@@ -260,11 +260,8 @@ class IsoDom {
                     const scrollTop = (window.pageYOffset || doc.scrollTop || body.scrollTop) / (document.body.style.zoom || 1);
                     const scrollLeft = (window.pageXOffset || doc.scrollLeft || body.scrollLeft) / (document.body.style.zoom || 1);
 
-                    const clientTop = doc.clientTop || body.clientTop || 0;
-                    const clientLeft = doc.clientLeft || body.clientLeft || 0;
-
-                    top = rect.top + scrollTop + clientTop;
-                    left = rect.left + scrollLeft + clientLeft;
+                    top = rect.top + scrollTop;
+                    left = rect.left + scrollLeft;
                 } else {
                     top = rect.top + this.scrollContainer.scrollTop;
                     left = rect.left + this.scrollContainer.scrollLeft;
@@ -591,7 +588,7 @@ class IsoDom {
      * @param {Number} endY
      * @returns {Array}
      */
-    itemsInArea(startX, startY, endX, endY) {
+    itemsInArea(startX = 0, startY = 0, endX = this.config.columns, endY = this.config.rows) {
         const box = [];
 
         for (let row = startY; row < endY; row++) {
@@ -688,6 +685,9 @@ class IsoDom {
                 grid.appendChild(node);
             }
         }
+
+        // Clear grid elements
+        this.config.target.innerHTML = '';
 
         // Add grid and item container to DOM
         this.config.target.appendChild(grid);
