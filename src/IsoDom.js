@@ -426,16 +426,34 @@ class IsoDom {
         }
 
         // Collect all cells and keep only root item cells
-        const boxes = this.itemsInArea(0, 0, this.config.columns, this.config.rows);
+        const boxes = [];
+        for (let row = 0; row < this.config.rows; row++) {
+            for (let col = 0; col < this.config.columns; col++) {
+                const cell = this.cell(col, row);
+
+                if (!cell.item) {
+                    continue;
+                }
+
+                const rootCell = cell.getRootCell();
+                const endX = rootCell.x + cell.item.getWidth() - 1;
+                const endY = rootCell.y + cell.item.getHeight() - 1;
+
+                if (cell.x === endX && endY === cell.y) {
+                    boxes.push({ x: col, y: row, cell: rootCell, item: cell.item });
+                }
+            }
+        }
 
         // Set cell index
         const setIndex = box => {
             const limiters = [];
 
             const zones = this.itemsInArea(0, 0, box.cell.x + box.cell.item.getWidth(), box.cell.y + box.cell.item.getHeight());
+
             for (const zoneIndex in zones) {
                 const zone = zones[zoneIndex];
-                if (zone.cell.item !== box.cell.item && zone.cell.z) {
+                if (zone.item !== box.item && zone.cell.z) {
                     limiters.push(zone.cell.z);
                 }
             }
@@ -443,33 +461,9 @@ class IsoDom {
             box.cell.z = limiters.length ? Math.max(...limiters) + 1 : box.y + 1 + box.x;
         };
 
-        // Calculate z-index only for single row items - might seem like this
-        // does nothing, but it is required for items like glass window (1x1) behind a closet (1x2).
-        for (const box in boxes) {
-            if (boxes[box].cell.item.getHeight() === 1) {
-                setIndex(boxes[box]);
-            }
-        }
         // Adjust all items to their place
         for (const box in boxes) {
             setIndex(boxes[box]);
-        }
-        // Make sure items are still in correct position because of mixed calculation order.
-        // e.g. glass-wall (1x1) bottom does not get on top of bench-red (1x2).
-        for (const box in boxes) {
-            if (boxes[box].cell.item.getHeight() > 1) {
-                setIndex(boxes[box]);
-            }
-        }
-        // Readjust all indexes
-        for (const box in boxes) {
-            setIndex(boxes[box]);
-        }
-        // Final pass to make sure bench-red and such does not cut through the middle of a glass wall.
-        for (const box in boxes) {
-            if (boxes[box].cell.item.getHeight() > 1) {
-                setIndex(boxes[box]);
-            }
         }
 
         for (const cell in this.cells) {
