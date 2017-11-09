@@ -461,9 +461,15 @@ class IsoDom {
                 setIndex(boxes[box]);
             }
         }
-        // Final pass to make sure bench-red and such does not cut through the middle of a glass wall.
+        // Readjust all indexes
         for (const box in boxes) {
             setIndex(boxes[box]);
+        }
+        // Final pass to make sure bench-red and such does not cut through the middle of a glass wall.
+        for (const box in boxes) {
+            if (boxes[box].cell.item.getHeight() > 1) {
+                setIndex(boxes[box]);
+            }
         }
 
         for (const cell in this.cells) {
