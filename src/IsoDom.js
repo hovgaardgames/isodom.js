@@ -425,22 +425,22 @@ class IsoDom {
             this.cells[cell].z = null;
         }
 
-        // Collect all cells and keep only root item cells
         const boxes = [];
         for (let row = 0; row < this.config.rows; row++) {
             for (let col = 0; col < this.config.columns; col++) {
                 const cell = this.cell(col, row);
 
-                if (!cell.item) {
-                    continue;
+                if (cell.isItemRoot()) {
+                    boxes.push({ x: col, y: row, cell: cell, item: cell.item });
                 }
+            }
+        }
+        for (let col = 0; col < this.config.columns; col++) {
+            for (let row = 0; row < this.config.rows; row++) {
+                const cell = this.cell(col, row);
 
-                const rootCell = cell.getRootCell();
-                const endX = rootCell.x + cell.item.getWidth() - 1;
-                const endY = rootCell.y + cell.item.getHeight() - 1;
-
-                if (cell.x === endX && endY === cell.y) {
-                    boxes.push({ x: col, y: row, cell: rootCell, item: cell.item });
+                if (cell.isItemRoot()) {
+                    boxes.push({ x: col, y: row, cell: cell, item: cell.item });
                 }
             }
         }
