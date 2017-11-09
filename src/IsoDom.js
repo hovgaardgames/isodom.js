@@ -196,6 +196,8 @@ class IsoDomItem {
 
         this.orientation = order[next];
         this.update();
+
+        this.iso.emit('itemRotated', this);
     }
 
     /**
