@@ -9,10 +9,10 @@ let items = {
         size: [1, 1],
         tier: 1,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/vase1-1.png', offset: {top: -182, left: 142}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/vase1-2.png', offset: {top: -192, left: 149}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/vase1-3.png', offset: {top: -188, left: 143}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/vase1-4.png', offset: {top: -192, left: 149}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/vase1-1.png', offset: {top: -110, left: -10}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/vase1-1.png', offset: {top: -110, left: -10}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/vase1-1.png', offset: {top: -110, left: -10}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/vase1-1.png', offset: {top: -110, left: -10}},
         },
     },
     vase2: {
@@ -25,10 +25,10 @@ let items = {
         size: [1, 1],
         tier: 5,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/vase2-1.png', offset: {top: -222, left: 172}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/vase2-2.png', offset: {top: -222, left: 177}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/vase2-3.png', offset: {top: -222, left: 172}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/vase2-4.png', offset: {top: -222, left: 177}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/vase2-1.png', offset: {top: -150, left: 32}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/vase2-1.png', offset: {top: -150, left: 32}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/vase2-1.png', offset: {top: -150, left: 32}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/vase2-1.png', offset: {top: -150, left: 32}},
         },
     },
     closet1: {
@@ -41,10 +41,10 @@ let items = {
         size: [2,1],
         tier: 1,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/closet1-1.png', offset: {top: -492, left: 80}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/closet1-2.png', offset: {top: -496, left: -81}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/closet1-3.png', offset: {top: -519, left: 74}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/closet1-4.png', offset: {top: -341, left: -95}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/closet1-1.png', offset: {top: -330, left: -190}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/closet1-2.png', offset: {top: -330, left: -81}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/closet1-3.png', offset: {top: -330, left: -190}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/closet1-4.png', offset: {top: -330, left: -81}},
         }
     },
     small_closet1: {
@@ -57,10 +57,10 @@ let items = {
         size: [1, 1],
         tier: 2,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/small_closet1-1.png', offset: {top: -265, left: 90}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/small_closet1-2.png', offset: {top: -265, left: 66}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/small_closet1-3.png', offset: {top: -265, left: 90}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/small_closet1-4.png', offset: {top: -265, left: 66}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/small_closet1-1.png', offset: {top: -168, left: -59}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/small_closet1-2.png', offset: {top: -168, left: -81}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/small_closet1-3.png', offset: {top: -168, left: -59}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/small_closet1-4.png', offset: {top: -168, left: -81}},
         }
     },
     couch_blue1: {
@@ -73,10 +73,10 @@ let items = {
         size: [3, 1],
         tier: 2,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_blue1-1.png', offset: {top: -231, left: -143}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_blue1-2.png', offset: {top: -231, left: 112}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_blue1-3.png', offset: {top: -227, left: -140}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_blue1-4.png', offset: {top: -227, left: 100}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_blue1-1.png', offset: {top: -136, left: -284}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_blue1-2.png', offset: {top: -136, left: -50}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_blue1-3.png', offset: {top: -136, left: -284}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_blue1-4.png', offset: {top: -136, left: -50}},
         },
     },
     bench_red1: {
@@ -86,13 +86,13 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 800,
         bonus: 0.5,
-        size: [1, 2],
+        size: [2,1],
         tier: 3,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/bench_red1-1.png', offset: {top: -256, left: 115}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/bench_red1-2.png', offset: {top: -254, left: -15}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/bench_red1-3.png', offset: {top: -256, left: 115}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/bench_red1-4.png', offset: {top: -254, left: -15}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/bench_red1-1.png', offset: {top: -80, left: -156}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/bench_red1-2.png', offset: {top: -81, left: -25}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/bench_red1-3.png', offset: {top: -80, left: -156}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/bench_red1-4.png', offset: {top: -81, left: -25}},
         }
     },
     small_bench_red1: {
@@ -105,10 +105,10 @@ let items = {
         size: [1, 1],
         tier: 4,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/small_bench_red1-1.png', offset: {top: -166, left: 124}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/small_bench_red1-2.png', offset: {top: -166, left: 130}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/small_bench_red1-3.png', offset: {top: -166, left: 130}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/small_bench_red1-4.png', offset: {top: -166, left: 130}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/small_bench_red1-1.png', offset: {top: -66, left: -14}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/small_bench_red1-2.png', offset: {top: -66, left: -14}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/small_bench_red1-3.png', offset: {top: -66, left: -14}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/small_bench_red1-4.png', offset: {top: -66, left: -14}},
         },
     },
     meeting_table1: {
@@ -121,10 +121,10 @@ let items = {
         size: [3, 6],
         tier: 9,
         images: {
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/meeting_table1-1.png', offset: {top: -216, left: -526}},
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/meeting_table1-2.png', offset: {top: -216, left: -135}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/meeting_table1-3.png', offset: {top: -216, left: -526}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/meeting_table1-4.png', offset: {top: -216, left: -135}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/meeting_table1-1.png', offset: {top: -135, left: -646}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/meeting_table1-2.png', offset: {top: -128, left: -274}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/meeting_table1-3.png', offset: {top: -135, left: -646}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/meeting_table1-4.png', offset: {top: -128, left: -274}},
         }
     },
     table_and_chairs1: {
@@ -134,13 +134,13 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 1500,
         bonus: 5,
-        size: [2, 4],
+        size: [4,2],
         tier: 4,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/table_and_chairs1-1.png', offset: {top: -458, left: 113}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/table_and_chairs1-2.png', offset: {top: -465, left: -260}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/table_and_chairs1-3.png', offset: {top: -500, left: 34}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/table_and_chairs1-4.png', offset: {top: -510, left: -170}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/table_and_chairs1-1.png', offset: {top: -74, left: -311}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/table_and_chairs1-2.png', offset: {top: -73, left: -122}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/table_and_chairs1-3.png', offset: {top: -97, left: -378}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/table_and_chairs1-4.png', offset: {top: -103, left: -38}},
         },
     },
     watercooler1: {
@@ -153,10 +153,10 @@ let items = {
         size: [1, 1],
         tier: 5,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/watercooler1-1.png', offset: {top: -292, left: 106}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/watercooler1-2.png', offset: {top: -292, left: 106}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/watercooler1-3.png', offset: {top: -292, left: 106}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/watercooler1-4.png', offset: {top: -292, left: 106}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/watercooler1-1.png', offset: {top: -205, left: -39}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/watercooler1-2.png', offset: {top: -205, left: -39}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/watercooler1-3.png', offset: {top: -205, left: -39}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/watercooler1-4.png', offset: {top: -205, left: -39}},
         },
     },
     reception_area1: {
@@ -169,10 +169,10 @@ let items = {
         size: [3, 3],
         tier: 11,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/reception_area1-1.png', offset: {top: -443, left: -117}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/reception_area1-2.png', offset: {top: -443, left: -117}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/reception_area1-3.png', offset: {top: -443, left: -117}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/reception_area1-4.png', offset: {top: -443, left: -117}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/reception_area1-1.png', offset: {top: -47, left: -264}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/reception_area1-2.png', offset: {top: -47, left: -264}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/reception_area1-3.png', offset: {top: -47, left: -264}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/reception_area1-4.png', offset: {top: -47, left: -264}},
         },
     },
     coffe_closet1: {
@@ -185,10 +185,10 @@ let items = {
         size: [1, 1],
         tier: 2,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/coffe_closet1-1.png', offset: {top: -265, left: 90}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/coffe_closet1-2.png', offset: {top: -265, left: 66}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/coffe_closet1-3.png', offset: {top: -265, left: 90}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/coffe_closet1-4.png', offset: {top: -265, left: 66}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/coffe_closet1-1.png', offset: {top: -178, left: -66}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/coffe_closet1-2.png', offset: {top: -178, left: -72}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/coffe_closet1-3.png', offset: {top: -178, left: -66}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/coffe_closet1-4.png', offset: {top: -178, left: -72}},
         },
     },
     couch_black1: {
@@ -201,10 +201,10 @@ let items = {
         size: [1, 1],
         tier: 8,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_black1-1.png', offset: {top: -272, left: 90}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_black1-2.png', offset: {top: -272, left: 66}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_black1-3.png', offset: {top: -272, left: 90}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_black1-4.png', offset: {top: -272, left: 66}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_black1-1.png', offset: {top: -178, left: -61}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_black1-2.png', offset: {top: -178, left: -81}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_black1-3.png', offset: {top: -178, left: -61}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_black1-4.png', offset: {top: -178, left: -81}},
         }
     },
     couch_black2: {
@@ -214,13 +214,13 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 4000,
         bonus: 3,
-        size: [1, 2],
+        size: [2, 1],
         tier: 8,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_black2-1.png', offset: {top: -308, left: 70}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_black2-2.png', offset: {top: -308, left: -58}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_black2-3.png', offset: {top: -308, left: 70}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_black2-4.png', offset: {top: -308, left: -58}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/couch_black2-1.png', offset: {top: -133, left: -208}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/couch_black2-2.png', offset: {top: -133, left: -70}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/couch_black2-3.png', offset: {top: -133, left: -208}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/couch_black2-4.png', offset: {top: -133, left: -70}},
         },
     },
     tv_stand1: {
@@ -230,14 +230,14 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 1200,
         bonus: 4,
-        size: [1, 2],
+        size: [2, 1],
         tier: 8,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/tv_stand1-1.png', offset: {top: -461, left: 200}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/tv_stand1-2.png', offset: {top: -461, left: 60}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/tv_stand1-3.png', offset: {top: -461, left: 200}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/tv_stand1-4.png', offset: {top: -461, left: 60}},
-        }
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/tv_stand1-1.png', offset: {top: -291, left: -80}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/tv_stand1-2.png', offset: {top: -292, left: 43}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/tv_stand1-3.png', offset: {top: -291, left: -80}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/tv_stand1-4.png', offset: {top: -292, left: 43}},
+}
     },
     whiteboard2: {
         id: 16,
@@ -246,13 +246,13 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 500,
         bonus: 5,
-        size: [1, 2],
+        size: [2, 1],
         tier: 4,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/whiteboard2-1.png', offset: {top: -443, left: 142}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/whiteboard2-2.png', offset: {top: -443, left: 12}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/whiteboard2-3.png', offset: {top: -443, left: 142}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/whiteboard2-4.png', offset: {top: -443, left: 12}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/whiteboard2-1.png', offset: {top: -269, left: -132}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/whiteboard2-2.png', offset: {top: -273, left: 3}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/whiteboard2-3.png', offset: {top: -269, left: -132}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/whiteboard2-4.png', offset: {top: -273, left: 3}},
         }
     },
     glass_wall1: {
@@ -265,10 +265,10 @@ let items = {
         size: [1, 1],
         tier: 1,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall1-1.png', offset: {top: -513, left: 50}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall1-2.png', offset: {top: -513, left: 50}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall1-3.png', offset: {top: -513, left: 50}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall1-4.png', offset: {top: -513, left: 50}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall1-1.png', offset: {top: -424, left: -94}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall1-2.png', offset: {top: -424, left: -90}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall1-3.png', offset: {top: -424, left: -94}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall1-4.png', offset: {top: -424, left: -90}},
         },
     },
     glass_wall_corner1: {
@@ -281,10 +281,10 @@ let items = {
         size: [1, 1],
         tier: 1,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_corner1-1.png', offset: {top: -569, left: 50}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_corner1-2.png', offset: {top: -532, left: 110}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_corner1-3.png', offset: {top: -499, left: 50}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_corner1-4.png', offset: {top: -534, left: -12}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_corner1-1.png', offset: {top: -477, left: -93}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_corner1-2.png', offset: {top: -442, left: -29}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_corner1-3.png', offset: {top: -408, left: -91}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_corner1-4.png', offset: {top: -443, left: -154}},
         },
     },
     glass_wall_t1: {
@@ -297,10 +297,10 @@ let items = {
         size: [1, 1],
         tier: 1,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_t1-1.png', offset: {top: -516, left: 54}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_t1-2.png', offset: {top: -512, left: 51}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_t1-3.png', offset: {top: -516, left: 54}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_t1-4.png', offset: {top: -512, left: 51}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_t1-1.png', offset: {top: -422, left: -91}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_t1-2.png', offset: {top: -422, left: -92}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_t1-3.png', offset: {top: -423, left: -91}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_t1-4.png', offset: {top: -423, left: -95}},
         },
     },
     glass_wall_x1: {
@@ -313,10 +313,10 @@ let items = {
         size: [1, 1],
         tier: 1,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_x1-1.png', offset: {top: -514, left: 50}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_x1-2.png', offset: {top: -514, left: 50}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_x1-3.png', offset: {top: -514, left: 50}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_x1-4.png', offset: {top: -514, left: 50}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/glass_wall_x1-1.png', offset: {top: -421, left: -92}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/glass_wall_x1-1.png', offset: {top: -421, left: -92}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/glass_wall_x1-1.png', offset: {top: -421, left: -92}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/glass_wall_x1-1.png', offset: {top: -421, left: -92}},
         }
     },
     vending_machine1: {
@@ -326,13 +326,13 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 800,
         bonus: 4,
-        size: [1, 2],
+        size: [2, 1],
         tier: 7,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/vending_machine1-1.png', offset: {top: -502, left: 63}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/vending_machine1-2.png', offset: {top: -499, left: -76}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/vending_machine1-3.png', offset: {top: -502, left: 63}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/vending_machine1-4.png', offset: {top: -499, left: -76}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/vending_machine1-1.png', offset: {top: -331, left: -202}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/vending_machine1-2.png', offset: {top: -334, left: -77}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/vending_machine1-3.png', offset: {top: -331, left: -202}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/vending_machine1-4.png', offset: {top: -334, left: -77}},
         }
     },
     ping_pong_table1: {
@@ -342,13 +342,13 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 700,
         bonus: 4,
-        size: [2, 4],
+        size: [4, 2],
         tier: 10,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/ping_pong_table1-1.png', offset: {top: -512, left: 52}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/ping_pong_table1-2.png', offset: {top: -512, left: -256}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/ping_pong_table1-3.png', offset: {top: -512, left: 52}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/ping_pong_table1-4.png', offset: {top: -512, left: -256}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/ping_pong_table1-1.png', offset: {top: -120, left: -350}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/ping_pong_table1-2.png', offset: {top: -120, left: -130}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/ping_pong_table1-3.png', offset: {top: -120, left: -350}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/ping_pong_table1-4.png', offset: {top: -120, left: -130}},
         },
     },
     large_coffee_machine1: {
@@ -358,29 +358,29 @@ let items = {
         orientation: IsoDom.ORIENTATION_SW,
         price: 5700,
         bonus: 9,
-        size: [1, 2],
+        size: [2, 1],
         tier: 10,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/large_coffee_machine1-1.png', offset: {top: -353, left: 121}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/large_coffee_machine1-2.png', offset: {top: -352, left: -6}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/large_coffee_machine1-3.png', offset: {top: -353, left: 121}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/large_coffee_machine1-4.png', offset: {top: -352, left: -6}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/large_coffee_machine1-1.png', offset: {top: -190, left: -160}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/large_coffee_machine1-2.png', offset: {top: -170, left: -10}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/large_coffee_machine1-3.png', offset: {top: -190, left: -160}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/large_coffee_machine1-4.png', offset: {top: -170, left: -10}},
         },
     },
     lounge_chair1: {
         id: 24,
-        name: 'lounge_chair1',
-        imagePath: "assets/lounge_chair1-{orientation}.png",
-        orientation: IsoDom.ORIENTATION_SW,
-        price: 1000,
-        bonus: 2,
-        size: [1, 1],
-        tier: 9,
-        images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/lounge_chair1-1.png', offset: {top: -260, left: 65}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/lounge_chair1-2.png', offset: {top: -260, left: 52}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/lounge_chair1-3.png', offset: {top: -283, left: 68}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/lounge_chair1-4.png', offset: {top: -292, left: 52}},
+            name: 'lounge_chair1',
+    imagePath: "assets/lounge_chair1-{orientation}.png",
+    orientation: IsoDom.ORIENTATION_SW,
+    price: 1000,
+    bonus: 2,
+    size: [1, 1],
+    tier: 9,
+    images: {
+    [IsoDom.ORIENTATION_NW]: {url: 'assets/lounge_chair1-1.png', offset: {top: -160, left: -91}},
+    [IsoDom.ORIENTATION_NE]: {url: 'assets/lounge_chair1-2.png', offset: {top: -160, left: -101}},
+    [IsoDom.ORIENTATION_SE]: {url: 'assets/lounge_chair1-3.png', offset: {top: -187, left: -85}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/lounge_chair1-4.png', offset: {top: -186, left: -101}},
         },
     },
     wall1: {
@@ -393,10 +393,10 @@ let items = {
         size: [1, 1],
         tier: 8,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall1-1.png', offset: {top: -513, left: 50}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall1-2.png', offset: {top: -513, left: 50}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall1-3.png', offset: {top: -513, left: 50}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall1-4.png', offset: {top: -513, left: 50}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall1-1.png', offset: {top: -424, left: -94}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall1-2.png', offset: {top: -424, left: -90}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall1-3.png', offset: {top: -424, left: -94}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall1-4.png', offset: {top: -424, left: -90}},
         },
     },
     wall_corner1: {
@@ -409,10 +409,10 @@ let items = {
         size: [1, 1],
         tier: 8,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_corner1-1.png', offset: {top: -569, left: 50}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_corner1-2.png', offset: {top: -532, left: 110}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_corner1-3.png', offset: {top: -499, left: 50}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_corner1-4.png', offset: {top: -534, left: -12}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_corner1-1.png', offset: {top: -477, left: -93}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_corner1-2.png', offset: {top: -442, left: -29}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_corner1-3.png', offset: {top: -408, left: -91}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_corner1-4.png', offset: {top: -443, left: -154}},
         },
         placementOffset: [
             {top: -569, left: 50},
@@ -431,10 +431,10 @@ let items = {
         size: [1, 1],
         tier: 8,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_t1-1.png', offset: {top: -516, left: 54}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_t1-2.png', offset: {top: -512, left: 51}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_t1-3.png', offset: {top: -516, left: 54}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_t1-4.png', offset: {top: -512, left: 51}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_t1-1.png', offset: {top: -422, left: -91}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_t1-2.png', offset: {top: -422, left: -92}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_t1-3.png', offset: {top: -423, left: -91}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_t1-4.png', offset: {top: -423, left: -95}},
         },
     },
     wall_x1: {
@@ -447,10 +447,10 @@ let items = {
         size: [1, 1],
         tier: 8,
         images: {
-            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_x1-1.png', offset: {top: -514, left: 50}},
-            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_x1-2.png', offset: {top: -514, left: 50}},
-            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_x1-3.png', offset: {top: -514, left: 50}},
-            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_x1-4.png', offset: {top: -514, left: 50}},
+            [IsoDom.ORIENTATION_NW]: {url: 'assets/wall_x1-1.png', offset: {top: -421, left: -92}},
+            [IsoDom.ORIENTATION_NE]: {url: 'assets/wall_x1-2.png', offset: {top: -421, left: -92}},
+            [IsoDom.ORIENTATION_SE]: {url: 'assets/wall_x1-3.png', offset: {top: -421, left: -92}},
+            [IsoDom.ORIENTATION_SW]: {url: 'assets/wall_x1-4.png', offset: {top: -421, left: -92}},
         }
     },
 };
