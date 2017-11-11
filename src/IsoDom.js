@@ -464,10 +464,13 @@ class IsoDom {
 
                 if (cell.isItemRoot()) {
                     this._renderPath(x, y);
+                    break;
                 } else if (partial && x === col && y > row) {
-                    // Necessary only for partial render only
                     const root = cell.getRootCell();
                     this._renderPath(root.x, root.y);
+
+                    row += root.item.getHeight();
+                    break;
                 }
             }
         }
