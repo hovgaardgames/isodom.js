@@ -587,21 +587,13 @@ class IsoDom {
      */
     itemsInArea(startX = 0, startY = 0, endX = this.config.columns, endY = this.config.rows) {
         const box = [];
-        const items = [];
 
         for (let row = startY; row < endY; row++) {
             for (let col = startX; col < endX; col++) {
                 const cell = this.cell(col, row);
-
-                if (cell.item && !items.includes(cell.item)) {
-                    const root = cell.getRootCell();
-                    box.push({ x: root.x, y: root.y, cell: root, item: cell.item });
-                    items.push(cell.item);
+                if (cell.isItemRoot()) {
+                    box.push({ x: col, y: row, cell: cell, item: cell.item });
                 }
-
-                // if (cell.isItemRoot()) {
-                //     box.push({ x: col, y: row, cell: cell, item: cell.item });
-                // }
             }
         }
 
