@@ -451,13 +451,23 @@ class IsoDom {
      * @param {Number} row Beginning row.
      */
     draw(col = 0, row = 0) {
+        const partial = col + row > 0;
+
         // Calculate segment
         for (let y = row; y < this.config.rows; y++) {
             for (let x = col; x < this.config.columns; x++) {
                 const cell = this.cell(x, y);
 
+                if (!cell.item) {
+                    continue;
+                }
+
                 if (cell.isItemRoot()) {
                     this._renderPath(x, y);
+                } else if (partial && x === col && y > row) {
+                    // Necessary only for partial render only
+                    const root = cell.getRootCell();
+                    this._renderPath(root.x, root.y);
                 }
             }
         }
