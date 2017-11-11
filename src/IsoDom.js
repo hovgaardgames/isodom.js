@@ -591,9 +591,17 @@ class IsoDom {
         for (let row = startY; row < endY; row++) {
             for (let col = startX; col < endX; col++) {
                 const cell = this.cell(col, row);
+
+                if (!cell.item) {
+                    continue;
+                }
+
                 if (cell.isItemRoot()) {
                     box.push({ x: col, y: row, cell: cell, item: cell.item });
                 }
+
+                // Skip the rest of the item
+                col += cell.item.getWidth() - 1;
             }
         }
 
