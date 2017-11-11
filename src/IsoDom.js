@@ -463,12 +463,17 @@ class IsoDom {
                 }
 
                 if (cell.isItemRoot()) {
+                    // We found the first item in the row, leaving the rest for the _renderPath.
                     this._renderPath(x, y);
                     break;
                 } else if (partial && x === col && y > row) {
+                    // It happened that during a partial update the next rows contain items
+                    // that actually start x - 1 or lower so to make sure that item has higher z-index,
+                    // we run it's render path from its root cell.
                     const root = cell.getRootCell();
                     this._renderPath(root.x, root.y);
 
+                    // Skip the remaining height of the item to avoid rendering it multiple times (though it might be required).
                     row += root.item.getHeight();
                     break;
                 }
@@ -784,22 +789,31 @@ class IsoDom {
         for (let x = col; x < this.config.columns; x++) {
             const cell = this.cell(x, row);
 
-            if (cell.item) {
-                if (cell.isItemRoot()) {
-                    this._setIndex(cell);
-                } else {
-                    const rootCell = cell.getRootCell();
-                    for (let y = rootCell.y; y <= row; y++) {
-                        if (y === rootCell.y) {
-                            this._renderPath(x, y);
-                        } else {
-                            this._renderPath(x + rootCell.item.getWidth(), y);
-                        }
+            if (!cell.item) {
+                continue;
+            }
+
+            if (cell.isItemRoot()) {
+                // Cell is item root so we can calculate it's index because all dependencies are already calculated.
+                this._setIndex(cell);
+            } else {
+                // Cell is not item root, so it's an item that starts higher (y - 1 or higher),
+                // this item will require z-index recalculation so that we don't overlap it.
+                const rootCell = cell.getRootCell();
+                for (let y = rootCell.y; y <= row; y++) {
+                    if (y === rootCell.y) {
+                        // Calculate the render path of the obstacles root cell.
+                        this._renderPath(x, y);
+                    } else {
+                        // Skip the obstacle on the next row(s) until we match our row and (re)calculate any item
+                        // that depends on the obstacle.
+                        this._renderPath(x + rootCell.item.getWidth(), y);
                     }
                 }
-
-                x += cell.item.getWidth() - 1;
             }
+
+            // Skip remaining item cells
+            x += cell.item.getWidth() - 1;
         }
     }
 
