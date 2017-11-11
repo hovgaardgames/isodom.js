@@ -74,6 +74,7 @@ class IsoDomCell {
     setItem(item, root) {
         this.item = item;
         this.itemRootCell = root;
+        this.z = null;
     }
 
     /**
@@ -208,6 +209,23 @@ class IsoDomItem {
         const position = cell.position();
         this.el.style.top = `${position.top}px`;
         this.el.style.left = `${position.left}px`;
+    }
+
+    /**
+     * Remove item from grid.
+     */
+    remove() {
+        this.iso.removeItem(this);
+    }
+
+    /**
+     * Place item into the grid on specified position.
+     * If item already exists it will be moved, otherwise it will be added.
+     * @param {Number} x
+     * @param {Number} y
+     */
+    place(x, y) {
+        this.iso.moveItem(this, x, y);
     }
 
     /**
@@ -374,6 +392,16 @@ class IsoDom {
     }
 
     /**
+     * Create new IsoDomItem.
+     * @param {String} name
+     * @param {*} config
+     * @returns {IsoDomItem}
+     */
+    makeItem(name, config = {}) {
+        return new IsoDomItem(name, this, config);
+    }
+
+    /**
      * Assert item placement on cell:
      * - the cell is valid;
      * - the item would not go out of bounds;
@@ -418,59 +446,26 @@ class IsoDom {
     }
 
     /**
-     * Execute DOM draw (aka. calculate z-index =.=).
+     * Execute DOM update (aka. calculate z-indexes).
+     * @param {Number} col Beginning column.
+     * @param {Number} row Beginning row.
      */
-    draw() {
-        for (const cell in this.cells) {
-            this.cells[cell].z = null;
-        }
-
-        const boxes = [];
-        for (let row = 0; row < this.config.rows; row++) {
-            for (let col = 0; col < this.config.columns; col++) {
-                const cell = this.cell(col, row);
+    draw(col = 0, row = 0) {
+        // Calculate segment
+        for (let y = row; y < this.config.rows; y++) {
+            for (let x = col; x < this.config.columns; x++) {
+                const cell = this.cell(x, y);
 
                 if (cell.isItemRoot()) {
-                    boxes.push({ x: col, y: row, cell: cell, item: cell.item });
-                }
-            }
-        }
-        for (let col = 0; col < this.config.columns; col++) {
-            for (let row = 0; row < this.config.rows; row++) {
-                const cell = this.cell(col, row);
-
-                if (cell.isItemRoot()) {
-                    boxes.push({ x: col, y: row, cell: cell, item: cell.item });
+                    this._renderPath(x, y);
                 }
             }
         }
 
-        // Set cell index
-        const setIndex = box => {
-            const limiters = [];
-
-            const zones = this.itemsInArea(0, 0, box.cell.x + box.cell.item.getWidth(), box.cell.y + box.cell.item.getHeight());
-
-            for (const zoneIndex in zones) {
-                const zone = zones[zoneIndex];
-                if (zone.item !== box.item && zone.cell.z) {
-                    limiters.push(zone.cell.z);
-                }
-            }
-
-            box.cell.z = limiters.length ? Math.max(...limiters) + 1 : box.y + 1 + box.x;
-        };
-
-        // Adjust all items to their place
-        for (const box in boxes) {
-            setIndex(boxes[box]);
-        }
-
+        // Update cells
         for (const cell in this.cells) {
             this.cells[cell].update();
         }
-
-        this.emit('gridUpdated', this);
     }
 
     /**
@@ -592,13 +587,21 @@ class IsoDom {
      */
     itemsInArea(startX = 0, startY = 0, endX = this.config.columns, endY = this.config.rows) {
         const box = [];
+        const items = [];
 
         for (let row = startY; row < endY; row++) {
             for (let col = startX; col < endX; col++) {
                 const cell = this.cell(col, row);
-                if (cell.isItemRoot()) {
-                    box.push({ x: col, y: row, cell: cell, item: cell.item });
+
+                if (cell.item && !items.includes(cell.item)) {
+                    const root = cell.getRootCell();
+                    box.push({ x: root.x, y: root.y, cell: root, item: cell.item });
+                    items.push(cell.item);
                 }
+
+                // if (cell.isItemRoot()) {
+                //     box.push({ x: col, y: row, cell: cell, item: cell.item });
+                // }
             }
         }
 
@@ -673,8 +676,8 @@ class IsoDom {
             for (let x = 0; x < this.config.columns; x++) {
                 const node = document.createElement('div');
                 node.classList.add(this.config.columnClass);
-                node.setAttribute('row', y);
                 node.setAttribute('column', x);
+                node.setAttribute('row', y);
                 node.style.width = this.config.cellSize[0] + "px";
                 node.style.height = this.config.cellSize[1] + "px";
 
@@ -719,8 +722,6 @@ class IsoDom {
             for (let y = rootCell.y; y < rootCell.y + item.getHeight(); y++) {
                 const cell = this.cell(x, y);
 
-                // TODO intersects with another item
-
                 cell.setItem(item, rootCell);
             }
         }
@@ -738,7 +739,55 @@ class IsoDom {
             return;
         }
 
-        cells.forEach(cell => cell.setItem(null, null));
+        cells.forEach(cell => {
+            cell.setItem(null, null);
+            cell.update();
+        });
+    }
+
+    // Set cell index
+    _setIndex(cell) {
+        const limiters = [];
+
+        const zones = this.itemsInArea(0, 0, cell.x + cell.item.getWidth(), cell.y + cell.item.getHeight());
+
+        for (const zoneIndex in zones) {
+            const zone = zones[zoneIndex];
+            if (zone.item !== cell.item && zone.cell.z) {
+                limiters.push(zone.cell.z);
+            }
+        }
+
+        cell.z = limiters.length ? Math.max(...limiters) + 1 : cell.y + 1 + cell.x;
+    };
+
+    /**
+     * Move along the item render path and update z index.
+     * @param {Number} col
+     * @param {Number} row
+     * @private
+     */
+    _renderPath(col, row) {
+        for (let x = col; x < this.config.columns; x++) {
+            const cell = this.cell(x, row);
+
+            if (cell.item) {
+                if (cell.isItemRoot()) {
+                    this._setIndex(cell);
+                } else {
+                    const rootCell = cell.getRootCell();
+                    for (let y = rootCell.y; y <= row; y++) {
+                        if (y === rootCell.y) {
+                            this._renderPath(x, y);
+                        } else {
+                            this._renderPath(x + rootCell.item.getWidth(), y);
+                        }
+                    }
+                }
+
+                x += cell.item.getWidth() - 1;
+            }
+        }
     }
 
     /**

@@ -96,7 +96,7 @@ class IsoDomDragAndDrop {
         }
 
         this.isoDom.moveItem(this.item, this.destinationCell.x, this.destinationCell.y);
-        this.isoDom.draw();
+        this.isoDom.draw(this.destinationCell.x, this.destinationCell.y);
 
         this.isoDom.emit('itemDrop', this.item, this.destinationCell, this);
         this.isoDom.emit('dragEnd', false, this); // canceled = false
