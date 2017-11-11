@@ -18,6 +18,7 @@
 
 .iso-dom.iso-dom--debug .iso-dom__column {
     border: 1px solid red;
+    font-size: 28px;
 }
 
 .iso-dom-item {
