@@ -783,20 +783,14 @@ class IsoDom {
      * Move along the item render path and update z index.
      * @param {Number} col
      * @param {Number} row
-     * @param {IsoDomCell} prevItemCell
      * @private
      */
-    _renderPath(col, row, prevItemCell = null) {
+    _renderPath(col, row) {
         for (let x = col; x < this.config.columns; x++) {
             const cell = this.cell(x, row);
 
             if (!cell.item) {
                 continue;
-            }
-
-            // Cut the render path because current item already has greater z-index than previous.
-            if (prevItemCell && cell.z && cell.z > prevItemCell.z) {
-                return;
             }
 
             if (cell.isItemRoot()) {
@@ -806,27 +800,20 @@ class IsoDom {
                 // Cell is not item root, so it's an item that starts higher (y - 1 or higher),
                 // this item will require z-index recalculation so that we don't overlap it.
                 const rootCell = cell.getRootCell();
-
-                // Cut the render path because the obstacle already has greater z-index than previous.
-                if (prevItemCell && rootCell.z && rootCell.z > prevItemCell.z) {
-                    return;
-                }
-
                 for (let y = rootCell.y; y <= row; y++) {
                     if (y === rootCell.y) {
-                        // Calculate the render path of the obstacles first.
-                        this._renderPath(x, y, prevItemCell);
+                        // Calculate the render path of the obstacles root cell.
+                        this._renderPath(x, y);
                     } else {
                         // Skip the obstacle on the next row(s) until we match our row and (re)calculate any item
                         // that depends on the obstacle.
-                        this._renderPath(x + rootCell.item.getWidth(), y, rootCell);
+                        this._renderPath(x + rootCell.item.getWidth(), y);
                     }
                 }
             }
 
             // Skip remaining item cells
             x += cell.item.getWidth() - 1;
-            prevItemCell = cell;
         }
     }
 
