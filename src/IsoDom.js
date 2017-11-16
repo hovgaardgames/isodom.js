@@ -593,6 +593,7 @@ class IsoDom {
         }
 
         item.el.parentNode.removeChild(item.el);
+        item.setElement(null);
     }
 
     /**
