@@ -261,6 +261,7 @@ class IsoDom {
             cellSize: [100, 100],
             rows: 10,
             columns: 10,
+            step: 1,
             gridClass: 'iso-dom',
             itemClass: 'iso-dom-item',
             columnClass: 'iso-dom__column',
@@ -777,7 +778,7 @@ class IsoDom {
             }
         }
 
-        cell.z = limiters.length ? Math.max(...limiters) + 1 : cell.y + 1 + cell.x;
+        cell.z = limiters.length ? Math.max(...limiters) + this.config.step : cell.y + this.config.step + cell.x;
     };
 
     /**
