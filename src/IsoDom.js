@@ -185,30 +185,42 @@ class IsoDomItem {
      * @param {Boolean} clockwise
      */
     rotate(clockwise = true) {
-        const order = [IsoDom.ORIENTATION_SW, IsoDom.ORIENTATION_NW, IsoDom.ORIENTATION_NE, IsoDom.ORIENTATION_SE];
-        const current = order.indexOf(this.orientation);
+        const current = this.iso.config.orientationOrder.indexOf(this.orientation);
         let next = clockwise ? current + 1 : current - 1;
 
         if (next < 0) {
-            next = order.length - 1;
-        } else if (next >= order.length) {
+            next = this.iso.config.orientationOrder.length - 1;
+        } else if (next >= this.iso.config.orientationOrder.length) {
             next = 0;
         }
 
-        this.orientation = order[next];
-        this.update();
-
+        this.orientate(this.iso.config.orientationOrder[next]);
         this.iso.emit('itemRotated', this);
+    }
+
+    /**
+     * Orientate item to specific direction.
+     * @param {String} orientation
+     */
+    orientate(orientation) {
+        if (!this.defaults.images[orientation]) {
+            throw new Error(`Invalid orientation ("${orientation}") provided for ${this.name} item.`);
+        }
+
+        this.orientation = orientation;
+        this.update();
     }
 
     /**
      * Position the item on cell.
      * @param {IsoDomCell} cell
+     * @param {Number} offsetTop
+     * @param {Number} offsetLeft
      */
-    positionOnCell(cell) {
+    positionOnCell(cell, offsetTop = 0, offsetLeft = 0) {
         const position = cell.position();
-        this.el.style.top = `${position.top}px`;
-        this.el.style.left = `${position.left}px`;
+        this.el.style.top = `${position.top + offsetTop}px`;
+        this.el.style.left = `${position.left + offsetLeft}px`;
     }
 
     /**
@@ -268,6 +280,7 @@ class IsoDom {
             itemContainerClass: 'iso-dom-items',
             plugins: [],
             events: {},
+            orientationOrder: [IsoDom.ORIENTATION_SW, IsoDom.ORIENTATION_NW, IsoDom.ORIENTATION_NE, IsoDom.ORIENTATION_SE],
             cellPosition(cell) {
                 const rect = cell.el.getBoundingClientRect();
 
