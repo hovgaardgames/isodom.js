@@ -648,7 +648,7 @@ class IsoDom {
      */
     on(event, listener) {
         if (typeof event === 'object') {
-            for (const index of event) {
+            for (const index in event) {
                 this._addHandler(event[index], listener);
             }
         } else {
