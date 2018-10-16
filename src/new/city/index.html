@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>isodom.js City Example</title>
+    <link rel="stylesheet" href="../IsoDom.css">
+    <style>
+        #container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            border: 2px solid grey;
+            overflow: auto;
+        }
+        .iso-dom {
+            transform: rotateX(59.5deg) rotateZ(45deg);
+            margin-left: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="isodom"></div>
+</div>
+
+<p>Assets by: <a href="http://kenney.nl/assets?s=isometric">Kenney.nl</a></p>
+
+<script src="../IsoDom.js" type="application/javascript"></script>
+<script src="../conductors/dom/DOM.js" type="application/javascript"></script>
+<script>
+    const conductor = new IsoDomDOMConductor({
+        target: document.getElementById('isodom'),
+    });
+
+    let iso = new IsoDom(conductor, {
+        debug: true,
+        columns: 10,
+        rows: 10,
+        cellSize: [88, 88],
+        items: {
+            straightRoad: {
+                orientation: IsoDom.ORIENTATION_SW,
+                size: [1,1],
+                images: {
+                    [IsoDom.ORIENTATION_NW]: { url: 'assets/isometriccity/PNG/cityTiles_073.png', offset: { top: -36, left: -1 } },
+                    [IsoDom.ORIENTATION_NE]: { url: 'assets/isometriccity/PNG/cityTiles_081.png', offset: { top: -36, left: -1} },
+                    [IsoDom.ORIENTATION_SE]: { url: 'assets/isometriccity/PNG/cityTiles_073.png', offset: { top: -36, left: -1} },
+                    [IsoDom.ORIENTATION_SW]: { url: 'assets/isometriccity/PNG/cityTiles_081.png', offset: { top: -39, left: 0 } },
+                },
+            },
+            cornerRoad: {
+                orientation: IsoDom.ORIENTATION_SW,
+                size: [1,1],
+                images: {
+                    [IsoDom.ORIENTATION_NW]: { url: 'assets/isometriccity/PNG/cityTiles_122.png', offset: { top: -38, left: -1 } },
+                    [IsoDom.ORIENTATION_NE]: { url: 'assets/isometriccity/PNG/cityTiles_124.png', offset: { top: -38, left: -1} },
+                    [IsoDom.ORIENTATION_SE]: { url: 'assets/isometriccity/PNG/cityTiles_126.png', offset: { top: -38, left: -1} },
+                    [IsoDom.ORIENTATION_SW]: { url: 'assets/isometriccity/PNG/cityTiles_125.png', offset: { top: -38, left: -1 } },
+                },
+            }
+        }
+    });
+
+    iso.addItem('straightRoad', 0, 0, { orientation: IsoDom.ORIENTATION_NW });
+    iso.addItem('straightRoad', 1, 0, { orientation: IsoDom.ORIENTATION_NW });
+    iso.addItem('cornerRoad', 2, 0, { orientation: IsoDom.ORIENTATION_SW });
+    iso.addItem('straightRoad', 2, 1, { orientation: IsoDom.ORIENTATION_SW });
+    iso.addItem('straightRoad', 2, 2, { orientation: IsoDom.ORIENTATION_SW });
+    iso.addItem('straightRoad', 2, 3, { orientation: IsoDom.ORIENTATION_SW });
+    iso.addItem('straightRoad', 2, 4, { orientation: IsoDom.ORIENTATION_SW });
+    iso.addItem('straightRoad', 2, 5, { orientation: IsoDom.ORIENTATION_SW });
+    iso.addItem('straightRoad', 2, 6, { orientation: IsoDom.ORIENTATION_SW });
+    iso.draw();
+</script>
+</body>
+</html>

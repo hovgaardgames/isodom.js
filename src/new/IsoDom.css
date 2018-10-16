@@ -1,0 +1,26 @@
+.iso-dom {
+    -webkit-transform: rotateX(55deg) rotateZ(45deg);
+    -moz-transform: rotateX(55deg) rotateZ(45deg);
+    -ms-transform: rotateX(55deg) rotateZ(45deg);
+    -o-transform: rotateX(55deg) rotateZ(45deg);
+    transform: rotateX(55deg) rotateZ(45deg);
+    border-collapse: collapse;
+
+    /* TODO calculate? */
+    margin-left: 890px;
+}
+
+.iso-dom__column {
+    text-align: center;
+    vertical-align: middle;
+    float: left;
+}
+
+.iso-dom.iso-dom--debug .iso-dom__column {
+    border: 1px solid red;
+    font-size: 28px;
+}
+
+.iso-dom-item {
+    position: absolute;
+}
