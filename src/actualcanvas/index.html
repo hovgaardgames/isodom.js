@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>isodom.js City Example</title>
+    <link rel="stylesheet" href="../IsoDom.css">
+    <style>
+        #container {
+            position: relative;
+            width: 1440px;
+            height: 900px;
+            border: 2px solid grey;
+            overflow: auto;
+        }
+        .iso-dom {
+            transform: rotateX(59.5deg) rotateZ(45deg);
+            margin-left: 1760px;
+            margin-top: -820px;
+        }
+        #overlays div {
+            position: absolute;
+            font-size: 80px;
+            z-index: 999999;
+            color: red;
+            font-weight: bold;
+            user-select: none;
+        }
+        .iso-dom-item {
+            user-select: none;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="container" class="dragscroll">
+    <div id="zoom" style="//zoom: 0.4">
+        <canvas id="isodom" style="display: none;"></canvas>
+        <canvas id="easeljs"></canvas>
+        <!--<div id="isodom"></div>-->
+        <div id="overlays"></div>
+    </div>
+</div>
+
+
+<p>Assets by: <a href="http://kenney.nl/assets?s=isometric">Kenney.nl</a></p>
+
+<script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+<script src="../IsoDom.js" type="application/javascript"></script>
+<script src="stresstest.js"></script>
+<script src="dragscroll.js"></script>
+</body>
+</html>
