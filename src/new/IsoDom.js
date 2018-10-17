@@ -10,6 +10,7 @@
  * @property {function(IsoDomCell, IsoDom)} [cellCreated]
  * @property {function(IsoDomItem, IsoDomCell, IsoDom)} [itemAdded]
  * @property {function(IsoDomCell, IsoDom)} [renderCell]
+ * @property {function(IsoDom)} [draw]
  */
 
 /**
@@ -231,6 +232,8 @@ class IsoDom {
         this.cellMap.forEach((cell) => {
             this.emit('renderCell', cell);
         });
+
+        this.emit('draw', this);
     }
 
     /**

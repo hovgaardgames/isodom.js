@@ -89,9 +89,9 @@ class IsoDomDOMConductor {
             this.positionItemOnCell(cell.item, cell);
 
             if (cell.z === null) {
-                cell.meta.el.style.zIndex = '';
+                cell.item.meta.el.style.zIndex = '';
             } else {
-                cell.meta.el.style.zIndex = cell.z;
+                cell.item.meta.el.style.zIndex = cell.z;
             }
         }
     }
