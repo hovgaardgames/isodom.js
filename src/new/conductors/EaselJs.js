@@ -64,8 +64,9 @@ class IsoDomEaselJsConductor {
      */
     renderCell(cell) {
         if (cell.item) {
-            cell.item.meta.displayObject.x = Number(cell.meta.displayObject.x);
-            cell.item.meta.displayObject.y = Number(cell.meta.displayObject.y);
+            let image = cell.item.image();
+            cell.item.meta.displayObject.x = Number(cell.meta.displayObject.x) + image.offset.left;
+            cell.item.meta.displayObject.y = Number(cell.meta.displayObject.y) + image.offset.top;
         }
     }
 
