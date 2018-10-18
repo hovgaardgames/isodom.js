@@ -180,10 +180,14 @@ class IsoDom {
             columns: 10,
             step: 1,
             orientationOrder: [IsoDom.ORIENTATION_SW, IsoDom.ORIENTATION_NW, IsoDom.ORIENTATION_NE, IsoDom.ORIENTATION_SE],
+            events: {},
         };
 
         Object.assign(this.config, config);
         conductor.setIsoDom(this);
+
+        // Attach events, some events like cellCreated can only be triggered from config.events.
+        this.on(this.config.events);
 
         this._init();
     }
