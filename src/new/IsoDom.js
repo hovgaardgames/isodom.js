@@ -95,6 +95,7 @@ class IsoDomCell {
 
 /**
  * @class IsoDomItem
+ * @property {IsoDomCell} cell
  * @property {IsoDomItemConfig} defaults
  * @property {IsoDom} iso
  * @property {string} name
@@ -109,6 +110,7 @@ class IsoDomItem {
      * @param {Object.<string, *>} config
      */
     constructor(isoDom, name, config = {}) {
+        this.cell = null;
         this.defaults = isoDom.getItemConfig(name);
         if (!this.defaults) {
             throw new Error(`IsoDom controlling the item does not contain "${name}" item configuration.`);
@@ -168,6 +170,7 @@ class IsoDom {
     constructor(conductor, config = {}) {
         this._listeners = {};
         this.conductor = conductor;
+        this.items = [];
         this.cellMap = new Map();
         this.config = {
             debug: false,
@@ -253,6 +256,8 @@ class IsoDom {
         this.assertItemPlacement(isoItem, x, y, false);
         const rootCell = this.cell(x, y);
         this._mapItemToCells(isoItem, rootCell);
+        isoItem.cell = rootCell;
+        this.items.push(isoItem);
 
         this.emit('itemAdded', isoItem, rootCell, this);
 

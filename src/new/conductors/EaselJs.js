@@ -74,23 +74,10 @@ class IsoDomEaselJsConductor {
      * Update stage.
      */
     updateStage() {
-        // TODO Optimize by providing two-way reference (cell <-> item)?
-
-        const cells = [];
-        for (let row = 0; row < this.iso.config.rows; row++) {
-            for (let col = 0; col < this.iso.config.columns; col++) {
-                const cell = this.iso.cell(col, row);
-
-                if (cell.item) {
-                    cells.push(cell);
-                }
-            }
-        }
-
-        cells
-            .sort((a, b) => a - b)
-            .forEach((cell, index) => {
-                this.stage.setChildIndex(cell.item.meta.displayObject, this.iso.config.rows * this.iso.config.columns + index);
+        this.iso.items
+            .sort((a, b) => a.cell.z - b.cell.z)
+            .forEach((item, index) => {
+                this.stage.setChildIndex(item.meta.displayObject, this.iso.config.rows * this.iso.config.columns + index);
             });
 
         this.stage.update();

@@ -74,8 +74,22 @@
         iso.on({
             itemAdded(item) {
                 item.meta.displayObject.scale = 0.55;
-                item.meta.displayObject.addEventListener('mouseover', e => {
-                    console.log('yes you could Jonas');
+                item.meta.displayObject.addEventListener('mouseover', () => {
+                    item.meta.displayObject.filters = [
+                        new createjs.ColorFilter(1, 1, 1, 1, 10, 10, 10, 0),
+                    ];
+                    item.meta.displayObject.cache(0, 0, item.meta.displayObject.image.width, item.meta.displayObject.image.height);
+                    iso.conductor.stage.update();
+                });
+                item.meta.displayObject.addEventListener('mouseout', () => {
+                    item.meta.displayObject.filters = [
+                        new createjs.ColorFilter(1, 1, 1, 1, 0, 0, 0, 0),
+                    ];
+                    item.meta.displayObject.cache(0, 0, item.meta.displayObject.image.width, item.meta.displayObject.image.height);
+                    iso.conductor.stage.update();
+                });
+                item.meta.displayObject.addEventListener('click', () => {
+
                 });
             },
         });
@@ -84,9 +98,8 @@
 
         iso.addItem('desk1', 0, 0, { orientation: IsoDom.ORIENTATION_SE });
         iso.addItem('meeting_table1', 0, 2, { orientation: IsoDom.ORIENTATION_SE });
+        iso.addItem('meeting_table1', 0, 5, { orientation: IsoDom.ORIENTATION_SE });
         iso.draw();
-
-
     });
     preload.loadManifest([
         { src: 'assets/cell.png', id: 'cell' },
