@@ -159,19 +159,6 @@ class IsoDom2 {
     }
 
     /**
-     * Place item on grid.
-     * @param {IsoDomItem} item
-     * @param {Number} x
-     * @param {Number} y
-     */
-    addItem(item, x, y) {
-        this.mountItem(item);
-        this._mapItemToCells(item, cell);
-
-        this.emit('itemAdded', item, cell, this);
-    }
-
-    /**
      * Remove item from grid.
      * @param {IsoDomItem} item
      */
@@ -183,44 +170,7 @@ class IsoDom2 {
         this.emit('itemRemoved', item, this);
     }
 
-    /**
-     * Move item to another place.
-     * @param {IsoDomItem} item
-     * @param {Number} x
-     * @param {Number} y
-     */
-    moveItem(item, x, y) {
-        if (!item.rootCell()) {
-            this.addItem(item, x, y);
-            return;
-        }
 
-        this.assertItemPlacement(item, x, y, true);
-        const fromCell = item.rootCell();
-        const cell = this.cell(x, y);
-
-        iso._unmapItemFromCells(item);
-        iso._mapItemToCells(item, cell);
-
-        this.emit('itemMoved', item, cell, fromCell, this);
-    }
-
-    /**
-     * Find IsoDomItem root cell.
-     * @param {IsoDomItem} item
-     * @returns {IsoDomCell[]|null}
-     */
-    findItemCells(item) {
-        const cells = [];
-
-        for (const cell in this.cells) {
-            if (this.cells[cell].item === item) {
-                cells.push(this.cells[cell]);
-            }
-        }
-
-        return cells;
-    }
 
     /**
      * Determine if area is available for new items.

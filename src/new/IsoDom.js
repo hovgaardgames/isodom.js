@@ -11,6 +11,7 @@
  * @property {function(IsoDomItem, IsoDomCell, IsoDom)} [itemAdded]
  * @property {function(IsoDomCell, IsoDom)} [renderCell]
  * @property {function(IsoDom)} [draw]
+ * @property {function(IsoDomItem, IsoDomCell, IsoDomCell, IsoDom)} [itemMoved]
  */
 
 /**
@@ -279,6 +280,31 @@ class IsoDom {
     }
 
     /**
+     * Move item to another place.
+     * If item does not exist in the grid, it will be added.
+     * @param {IsoDomItem} item
+     * @param {number} x
+     * @param {number} y
+     */
+    moveItem(item, x, y) {
+        if (!item.cell) {
+            this.addItem(item, x, y);
+            return;
+        }
+
+        this.assertItemPlacement(item, x, y, true);
+        const fromCell = item.cell;
+        const toCell = this.cell(x, y);
+
+        this._unmapItemFromCells(item);
+        this._mapItemToCells(item, toCell);
+
+        item.cell = toCell;
+
+        this.emit('itemMoved', item, fromCell, toCell, this);
+    }
+
+    /**
      * Assert item placement on cell:
      * - the cell is valid;
      * - the item would not go out of bounds;
@@ -404,6 +430,35 @@ class IsoDom {
     }
 
     /**
+     * Find IsoDomItem root cell.
+     * @param {IsoDomItem} item
+     * @returns {IsoDomCell[]|null}
+     */
+    findItemCells(item) {
+        const cells = [];
+        const rootCell = item.cell;
+
+        if (!rootCell) {
+            console.warn('Item does is not attached to any cells.');
+            return cells;
+        }
+
+        const distance = Math.max(item.getWidth(), item.getHeight());
+        const boundaryX = Math.min(rootCell.x + distance, this.config.columns);
+        const boundaryY = Math.min(rootCell.y + distance, this.config.rows);
+        for (let x = rootCell.x; x < boundaryX; x++) {
+            for (let y = rootCell.y; y < boundaryY; y++) {
+                const cell = this.cell(x, y);
+                if (cell.item === item) {
+                    cells.push(cell);
+                }
+            }
+        }
+
+        return cells;
+    }
+
+    /**
      * Add event listener.
      * @param {string|Array|IsoDomEvents|Object.<string, function>} event
      * @param {function|null} [listener]
@@ -504,6 +559,23 @@ class IsoDom {
                 cell.setItem(item, rootCell);
             }
         }
+    }
+
+    /**
+     * Unmap item from it's cells.
+     * @param {IsoDomItem} item
+     * @private
+     */
+    _unmapItemFromCells(item) {
+        const cells = this.findItemCells(item);
+
+        if (!cells.length) {
+            return;
+        }
+
+        cells.forEach(cell => {
+            cell.setItem(null, null);
+        });
     }
 
     /**
