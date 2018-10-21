@@ -58,7 +58,10 @@ class IsoDomEaselJsConductor {
             itemAdded: this.itemAdded.bind(this),
             itemMoved: this._itemMoved.bind(this),
             renderCell: this.renderCell.bind(this),
-            draw: this.updateStages.bind(this),
+            draw: () => {
+                this.updateItemIndexes();
+                this.updateStages();
+            },
         });
     }
 
@@ -96,7 +99,7 @@ class IsoDomEaselJsConductor {
         this.iso.items
             .sort((a, b) => a.cell.z - b.cell.z)
             .forEach((item, index) => {
-                this.itemsStage.setChildIndex(item.meta.displayObject, this.iso.config.rows * this.iso.config.columns + index);
+                this.itemsStage.setChildIndex(item.meta.displayObject, index);
             });
     }
 

@@ -8544,7 +8544,7 @@ this.createjs = this.createjs||{};
         if (this._prevStage && owner === undefined) { return; } // redundant listener.
 
         var target=null, oTarget = o.target;
-        if (!owner && (oTarget || nextStage)) { target = this._getObjectsUnderPoint(o.x, o.y, null, true); }
+        if ((!owner || !owner.mouseEnabled) && (oTarget || nextStage)) { target = this._getObjectsUnderPoint(o.x, o.y, null, true); }
 
         if (o.down) { this._dispatchMouseEvent(this, "stagemouseup", false, id, o, e, target); o.down = false; }
 

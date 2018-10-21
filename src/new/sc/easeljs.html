@@ -79,7 +79,7 @@
                     images: {
                         [IsoDom.ORIENTATION_NE]: { url: 'meeting_table1-1', offset: { top: -0, left: -0 } },
                         [IsoDom.ORIENTATION_NW]: { url: 'meeting_table1-2', offset: { top: -0, left: -0 } },
-                        [IsoDom.ORIENTATION_SW]: { url: 'meeting_table1-4', offset: {top: 268, left: 316} },
+                        [IsoDom.ORIENTATION_SW]: { url: 'meeting_table1-4', offset: { top: 286, left: 379 } },
                         [IsoDom.ORIENTATION_SE]: { url: 'meeting_table1-3', offset: { top: -0, left: -0 } },
                     },
                 },
@@ -87,16 +87,19 @@
             events: {
                 cellCreated(cell) {
                     cell.meta.displayObject.addEventListener('mouseover', () => {
+                        console.log('cell: mouseover');
                         if (moving) {
                             iso.conductor.updateItemPosition(moving, cell);
                             iso.conductor.itemsStage.update();
                         }
                     });
                     cell.meta.displayObject.addEventListener('click', () => {
+                        console.log('cell: click');
                         if (moving) {
                             moving.iso.moveItem(moving, cell.x, cell.y);
                             moving.iso.draw();
                             moving.iso.conductor.config.itemsTarget.style.pointerEvents = '';
+                            moving.iso.conductor.itemsStage.mouseEnabled = true;
                             moving = null;
                         }
                     });
@@ -105,6 +108,7 @@
                 itemAdded(item) {
                     item.meta.displayObject.scale = 0.55;
                     item.meta.displayObject.addEventListener('mouseover', () => {
+                        console.log('item: mouseover');
                         if (debug) {
                             return;
                         }
@@ -116,6 +120,7 @@
                         iso.conductor.itemsStage.update();
                     });
                     item.meta.displayObject.addEventListener('mouseout', () => {
+                        console.log('item: mouseclick');
                         if (debug) {
                             return;
                         }
@@ -127,8 +132,10 @@
                         iso.conductor.itemsStage.update();
                     });
                     item.meta.displayObject.addEventListener('click', (e) => {
+                        console.log('item: click');
                         if (e.nativeEvent.button === 0) {
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
+                            item.iso.conductor.itemsStage.mouseEnabled = false;
                             moving = item;
                         } else if (e.nativeEvent.button === 2) {
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
@@ -197,7 +204,7 @@
                     if (pivots.includes('right')) {
                         output.left *= -1;
                     }
-                    console.log(output);
+                    console.log(debug.orientation, output);
                     debug.meta.displayObject.filters = [];
                     debug.meta.displayObject.cache(0, 0, debug.meta.displayObject.image.width, debug.meta.displayObject.image.height);
                     debug = null;
