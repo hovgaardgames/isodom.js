@@ -70,7 +70,12 @@ class IsoDomEaselJsConductor {
      * @param {IsoDomItem} item
      */
     itemAdded(item) {
-        item.meta.displayObject = new createjs.Bitmap(this.config.resolve(item.image().url));
+        const resolvedImage = this.config.resolve(item.image().url);
+        if (!resolvedImage) {
+            throw new Error(`Unable to resolve image for ${item.image().url}.`);
+        }
+
+        item.meta.displayObject = new createjs.Bitmap(resolvedImage);
         this.itemsStage.addChild(item.meta.displayObject);
     }
 
