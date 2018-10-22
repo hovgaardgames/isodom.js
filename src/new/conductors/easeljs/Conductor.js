@@ -71,8 +71,8 @@ class IsoDomEaselJsConductor {
      */
     itemAdded(item) {
         const resolvedImage = this.config.resolve(item.image().url);
-        if (!resolvedImage) {
-            throw new Error(`Unable to resolve image for ${item.image().url}.`);
+        if (!resolvedImage || !resolvedImage.nodeName || resolvedImage.toLowerCase() !== 'img') {
+            throw new Error(`Resolved image must be of type HTMLImageElement for "${item.image().url}".`);
         }
 
         item.meta.displayObject = new createjs.Bitmap(resolvedImage);
