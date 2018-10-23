@@ -83,7 +83,6 @@
                         console.log('cell: mouseover');
                         if (moving) {
                             iso.conductor.updateItemPosition(moving, cell);
-                            iso.conductor.itemsStage.update();
                         }
                     });
                     cell.meta.displayObject.addEventListener('click', () => {
@@ -99,6 +98,23 @@
                 },
 
                 itemAdded(item) {
+                    const sprite = new createjs.SpriteSheet({
+                        images: [preload.getResult('coin-sprite')],
+                        frames: {
+                            width: 57.14285714285714,
+                            height: 57,
+                        },
+                        animations: {
+                            spin: {
+                                frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                                speed: 0.35,
+                            },
+                        },
+                    });
+                    const animation = new createjs.Sprite(sprite);
+                    animation.gotoAndPlay('spin');
+                    item.meta.displayObject.addChild(animation);
+
                     item.meta.displayObject.scale = 0.55;
                     item.meta.displayObject.addEventListener('mouseover', () => {
                         console.log('item: mouseover');
@@ -106,11 +122,10 @@
                             return;
                         }
 
-                        item.meta.displayObject.filters = [
+                        item.meta.displayObject.children[0].filters = [
                             new createjs.ColorFilter(1, 1, 1, 1, 10, 10, 10, 0),
                         ];
-                        item.meta.displayObject.cache(0, 0, item.meta.displayObject.image.width, item.meta.displayObject.image.height);
-                        iso.conductor.itemsStage.update();
+                        item.meta.displayObject.children[0].cache(0, 0, item.meta.displayObject.children[0].image.width, item.meta.displayObject.children[0].image.height);
                     });
                     item.meta.displayObject.addEventListener('mouseout', () => {
                         console.log('item: mouseclick');
@@ -118,11 +133,10 @@
                             return;
                         }
 
-                        item.meta.displayObject.filters = [
+                        item.meta.displayObject.children[0].filters = [
                             new createjs.ColorFilter(1, 1, 1, 1, 0, 0, 0, 0),
                         ];
-                        item.meta.displayObject.cache(0, 0, item.meta.displayObject.image.width, item.meta.displayObject.image.height);
-                        iso.conductor.itemsStage.update();
+                        item.meta.displayObject.children[0].cache(0, 0, item.meta.displayObject.children[0].image.width, item.meta.displayObject.children[0].image.height);
                     });
                     item.meta.displayObject.addEventListener('click', (e) => {
                         console.log('item: click');
@@ -132,11 +146,10 @@
                             moving = item;
                         } else if (e.nativeEvent.button === 2) {
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
-                            item.meta.displayObject.filters = [
+                            item.meta.displayObject.children[0].filters = [
                                 new createjs.ColorFilter(1, 1, 1, 1, 100, 0, 0, 100),
                             ];
-                            item.meta.displayObject.cache(0, 0, item.meta.displayObject.image.width, item.meta.displayObject.image.height);
-                            iso.conductor.itemsStage.update();
+                            item.meta.displayObject.children[0].cache(0, 0, item.meta.displayObject.children[0].image.width, item.meta.displayObject.children[0].image.height);
                             debug = item;
                             const imageOffset = item.image().offset;
                             debugStart = { top: Number(item.meta.displayObject.y) - imageOffset.top, left: Number(item.meta.displayObject.x) - imageOffset.left };
@@ -208,11 +221,12 @@
                     break;
             }
 
-            iso.conductor.itemsStage.update();
+            // iso.conductor.itemsStage.update();
         });
     });
     preload.loadManifest([
         { src: 'assets/cell.png', id: 'cell' },
+        { src: 'assets/coin-sprite.png', id: 'coin-sprite' },
         { src: 'assets/desk1-1.png', id: 'desk1-1' },
         { src: 'assets/desk1-2.png', id: 'desk1-2' },
         { src: 'assets/desk1-3.png', id: 'desk1-3' },
