@@ -175,9 +175,11 @@ class IsoDomEaselJsConductor {
         const rowStartX = halfWidth - halfCellWidth - (cell.y * halfCellWidth);
 
         // Dynamic display object?
-        const displayObject = new createjs.Bitmap(this.config.image);
+        const displayObject = new createjs.Container();
+        const image = new createjs.Bitmap(this.config.image);
         displayObject.x = rowStartX + cell.x * halfCellWidth;
         displayObject.y = (halfCellHeight * cell.x) + (halfCellHeight * cell.y);
+        displayObject.addChild(image);
 
         cell.meta.displayObject = displayObject;
 
