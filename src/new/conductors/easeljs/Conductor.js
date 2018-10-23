@@ -31,6 +31,9 @@ class IsoDomEaselJsConductor {
             resolve: null,
             offsetPivot: 'top-left',
         };
+        this.tickUpdateGrid = true;
+        this.tickUpdateItems = true;
+        this.tickUpdate = true;
 
         Object.assign(this.config, config);
 
@@ -60,9 +63,22 @@ class IsoDomEaselJsConductor {
             renderCell: this.renderCell.bind(this),
             draw: () => {
                 this.updateItemIndexes();
-                this.updateStages();
             },
         });
+
+        createjs.Ticker.timingMode = createjs.Ticker.RAF;
+        createjs.Ticker.addEventListener("tick", this.handleTick.bind(this));
+    }
+
+    /**
+     * Handle tick.
+     */
+    handleTick() {
+        if (!this.tickUpdate) {
+            return;
+        }
+
+        this.updateStages();
     }
 
     /**
@@ -75,7 +91,10 @@ class IsoDomEaselJsConductor {
             throw new Error(`Resolved image must be of type HTMLImageElement for "${item.image().url}".`);
         }
 
-        item.meta.displayObject = new createjs.Bitmap(resolvedImage);
+        const displayObject = new createjs.Container();
+        const image = new createjs.Bitmap(resolvedImage);
+        displayObject.addChild(image);
+        item.meta.displayObject = displayObject;
         this.itemsStage.addChild(item.meta.displayObject);
     }
 
@@ -93,8 +112,13 @@ class IsoDomEaselJsConductor {
      * Update all stages.
      */
     updateStages() {
-        this.gridStage.update();
-        this.itemsStage.update();
+        if (this.tickUpdateGrid) {
+            this.gridStage.update();
+        }
+
+        if (this.tickUpdateItems) {
+            this.itemsStage.update();
+        }
     }
 
     /**
@@ -121,11 +145,11 @@ class IsoDomEaselJsConductor {
         let destY = Number(cell.meta.displayObject.y);
 
         if (pivots.includes('bottom')) {
-            destY = destY - Number(item.meta.displayObject.image.height) * item.meta.displayObject.scale + this.iso.config.cellSize[1];
+            destY = destY - Number(item.meta.displayObject.children[0].image.height) * item.meta.displayObject.scale + this.iso.config.cellSize[1];
         }
 
         if (pivots.includes('right')) {
-            destX = destX - Number(item.meta.displayObject.image.width) * item.meta.displayObject.scale + this.iso.config.cellSize[0];
+            destX = destX - Number(item.meta.displayObject.children[0].image.width) * item.meta.displayObject.scale + this.iso.config.cellSize[0];
         }
 
         item.meta.displayObject.x = destX + image.offset.left;
@@ -175,11 +199,9 @@ class IsoDomEaselJsConductor {
         const rowStartX = halfWidth - halfCellWidth - (cell.y * halfCellWidth);
 
         // Dynamic display object?
-        const displayObject = new createjs.Container();
-        const image = new createjs.Bitmap(this.config.image);
+        const displayObject = new createjs.Bitmap(this.config.image);
         displayObject.x = rowStartX + cell.x * halfCellWidth;
         displayObject.y = (halfCellHeight * cell.x) + (halfCellHeight * cell.y);
-        displayObject.addChild(image);
 
         cell.meta.displayObject = displayObject;
 
@@ -192,6 +214,5 @@ class IsoDomEaselJsConductor {
      */
     _afterInit() {
         this.updateItemIndexes();
-        this.updateStages();
     }
 }
