@@ -71,7 +71,7 @@ class IsoDomEaselJsConductor {
      */
     itemAdded(item) {
         const resolvedImage = this.config.resolve(item.image().url);
-        if (!resolvedImage || !resolvedImage.nodeName || resolvedImage.toLowerCase() !== 'img') {
+        if (!resolvedImage || !resolvedImage.nodeName || resolvedImage.nodeName.toLowerCase() !== 'img') {
             throw new Error(`Resolved image must be of type HTMLImageElement for "${item.image().url}".`);
         }
 
