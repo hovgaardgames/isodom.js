@@ -67,6 +67,7 @@ class IsoDomEaselJsConductor {
         });
 
         createjs.Ticker.timingMode = createjs.Ticker.RAF;
+        createjs.Ticker.framerate = 144;
         createjs.Ticker.addEventListener("tick", this.handleTick.bind(this));
     }
 
@@ -76,6 +77,11 @@ class IsoDomEaselJsConductor {
     handleTick() {
         if (!this.tickUpdate) {
             return;
+        }
+
+        if (iso.fpsLabel) {
+            iso.fpsLabel.text = Math.round(createjs.Ticker.getMeasuredFPS()) + " fps";
+            iso.fpsLabel.updateCache();
         }
 
         this.updateStages();
@@ -169,10 +175,10 @@ class IsoDomEaselJsConductor {
      * @private
      */
     _beforeInit() {
-        this.config.gridTarget.width = this.iso.config.cellSize[0] * this.iso.config.columns;
-        this.config.gridTarget.height = this.iso.config.cellSize[1] * this.iso.config.rows;
-        this.config.itemsTarget.width = this.iso.config.cellSize[0] * this.iso.config.columns;
-        this.config.itemsTarget.height = this.iso.config.cellSize[1] * this.iso.config.rows;
+        this.config.gridTarget.width = window.innerWidth;
+        this.config.gridTarget.height = window.innerHeight;
+        this.config.itemsTarget.width = window.innerWidth;
+        this.config.itemsTarget.height = window.innerHeight;
         this.gridStage = new createjs.StageGL(this.config.gridTarget, Object.assign({ transparent: false, antialias: true }, this.config.stageConfig || {}));
         this.itemsStage = new createjs.StageGL(this.config.itemsTarget, Object.assign({ antialias: true }, this.config.stageConfig || {}, { transparent: true }));
         this.itemsStage.nextStage = this.gridStage;

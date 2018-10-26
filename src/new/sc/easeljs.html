@@ -52,8 +52,8 @@
 
         window.iso = new IsoDom(conductor, {
             debug: true,
-            columns: 10,
-            rows: 10,
+            columns: 100,
+            rows: 100,
             cellSize: [148, 88],
             items: {
                 desk1: {
@@ -159,14 +159,31 @@
             },
         });
 
-        iso.conductor.gridStage.enableMouseOver(20);
+        //iso.conductor.gridStage.enableMouseOver(20);
         iso.conductor.itemsStage.enableMouseOver(20);
 
-        iso.addItem('desk1', 0, 0, { orientation: IsoDom.ORIENTATION_SW });
+        iso.conductor.gridStage.scale = 0.2;
+        iso.conductor.itemsStage.scale = 0.2;
+
+        for (let row = 0; row < iso.config.rows-3; row = row+4) {
+            for (let col = 0; col < iso.config.columns-3; col = col+4) {
+                iso.addItem('desk1', col, row, { orientation: IsoDom.ORIENTATION_SW });
+            }
+        }
+
+        // add a text object to output the current FPS:
+        iso.fpsLabel = new createjs.Text("-- fps", "bold 60px Arial", "#000");
+        iso.conductor.itemsStage.addChild(iso.fpsLabel);
+        iso.fpsLabel.x = 10;
+        iso.fpsLabel.y = 20;
+        iso.fpsLabel.cache(0,0, 500, 500);
+
+        /*iso.addItem('desk1', 0, 0, { orientation: IsoDom.ORIENTATION_SW });
         iso.addItem('meeting_table1', 0, 2, { orientation: IsoDom.ORIENTATION_SW });
-        iso.addItem('meeting_table1', 0, 5, { orientation: IsoDom.ORIENTATION_SW });
+        iso.addItem('meeting_table1', 0, 5, { orientation: IsoDom.ORIENTATION_SW });*/
         iso.draw();
 
+        debug = true;
         document.addEventListener('keydown', (e) => {
             if (!debug) {
                 return;
@@ -176,6 +193,8 @@
             if (e.shiftKey) {
                 mod = 10;
             }
+
+            let wasdStepSize = 10;
 
             switch (e.code) {
                 case 'ArrowUp':
@@ -218,6 +237,22 @@
                     iso.draw();
                     iso.conductor.config.itemsTarget.style.pointerEvents = '';
                     e.preventDefault();
+                    break;
+                case 'KeyW':
+                    iso.conductor.itemsStage.y += wasdStepSize;
+                    iso.conductor.gridStage.y += wasdStepSize;
+                    break;
+                case 'KeyA':
+                    iso.conductor.itemsStage.x += wasdStepSize;
+                    iso.conductor.gridStage.x += wasdStepSize;
+                    break;
+                case 'KeyS':
+                    iso.conductor.itemsStage.y -= wasdStepSize;
+                    iso.conductor.gridStage.y -= wasdStepSize;
+                    break;
+                case 'KeyD':
+                    iso.conductor.itemsStage.x -= wasdStepSize;
+                    iso.conductor.gridStage.x -= wasdStepSize;
                     break;
             }
 
