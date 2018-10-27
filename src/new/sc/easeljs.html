@@ -175,6 +175,7 @@
 
         // Add background
         iso.background = new createjs.Bitmap(preload.getResult('expensiveBuilding'));
+        iso.background.setBounds(0,0, 6144, 3840); // Set bounds manually to allow for SPOT compatible image
         iso.conductor.itemsStage.addChild(iso.background);
         iso.background.x = -900;
         iso.background.y = -700;
