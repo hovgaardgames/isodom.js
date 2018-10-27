@@ -79,11 +79,6 @@ class IsoDomEaselJsConductor {
             return;
         }
 
-        if (iso.fpsLabel) {
-            iso.fpsLabel.text = Math.round(createjs.Ticker.getMeasuredFPS()) + " fps";
-            iso.fpsLabel.updateCache();
-        }
-
         this.updateStages();
     }
 
