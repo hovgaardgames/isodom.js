@@ -129,7 +129,7 @@ class IsoDomEaselJsConductor {
         this.iso.items
             .sort((a, b) => a.cell.z - b.cell.z)
             .forEach((item, index) => {
-                this.itemsStage.setChildIndex(item.meta.displayObject, index);
+                this.itemsStage.setChildIndex(item.meta.displayObject, index+1); // Start at 1 to ensure background stays at 0.
             });
     }
 
