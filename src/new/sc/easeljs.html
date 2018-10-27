@@ -37,7 +37,7 @@
 <script>
     /** @type {IsoDomItem} */
     let moving = null;
-    let debug = null;
+    let debug = true;
     let debugStart = null;
     let preload = new createjs.LoadQueue();
     preload.addEventListener('complete', () => {
@@ -56,7 +56,7 @@
             debug: true,
             columns: 20,
             rows: 20,
-            cellSize: [244, 144],
+            cellSize: [264, 152],
             items: {
                 desk1: {
                     orientation: IsoDom.ORIENTATION_SE,
@@ -65,7 +65,7 @@
                         [IsoDom.ORIENTATION_NW]: { url: 'desk1-1', offset: { top: 0, left: 0 } },
                         [IsoDom.ORIENTATION_NE]: { url: 'desk1-2', offset: { top: 0, left: 0 } },
                         [IsoDom.ORIENTATION_SE]: { url: 'desk1-3', offset: { top: 0, left: 0 } },
-                        [IsoDom.ORIENTATION_SW]: { url: 'desk1-4', offset: { top: 103, left: 39 } },
+                        [IsoDom.ORIENTATION_SW]: { url: 'desk1-4', offset: { top: 209, left: 74 } },
                     },
                 },
                 meeting_table1: {
@@ -94,6 +94,7 @@
                             moving.iso.draw();
                             moving.iso.conductor.config.itemsTarget.style.pointerEvents = '';
                             moving.iso.conductor.itemsStage.mouseEnabled = true;
+                            iso.conductor.gridStage.enableMouseOver(0);
                             moving = null;
                         }
                     });
@@ -145,6 +146,7 @@
                             if (dragging.active) return;
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
                             item.iso.conductor.itemsStage.mouseEnabled = false;
+                            iso.conductor.gridStage.enableMouseOver();
                             moving = item;
                         } else if (e.nativeEvent.button === 2) {
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
@@ -161,8 +163,8 @@
             },
         });
 
-        //iso.conductor.gridStage.enableMouseOver(20);
         iso.conductor.itemsStage.enableMouseOver(20);
+
 
         // Adding example desks
         for (let row = 0; row < iso.config.rows-3; row = row+4) {
@@ -177,8 +179,11 @@
         iso.background = new createjs.Bitmap(preload.getResult('expensiveBuilding'));
         iso.background.setBounds(0,0, 6144, 3840); // Set bounds manually to allow for SPOT compatible image
         iso.conductor.itemsStage.addChild(iso.background);
-        iso.background.x = -900;
-        iso.background.y = -700;
+        iso.background.x = -430;
+        iso.background.y = -650;
+        if(debug) {
+            iso.background.alpha = 0.5;
+        }
         iso.conductor.itemsStage.setChildIndex(iso.background, 0);
 
         // Set scale
@@ -190,7 +195,6 @@
 
         iso.conductor.gridStage.scale = iso.minimumScale;
         iso.conductor.itemsStage.scale = iso.minimumScale;
-
 
         // Setup mouse panning
         let dragging = { mousePressed: false, active: false, startX: 0, startY: 0, endX: 0, endY: 0 };
@@ -254,7 +258,6 @@
             }
         });
 
-        debug = true;
         document.addEventListener('keydown', (e) => {
             if (!debug) {
                 return;
@@ -302,7 +305,7 @@
                     }
                     console.log(debug.orientation, output);
                     debug.meta.displayObject.filters = [];
-                    debug.meta.displayObject.cache(0, 0, debug.meta.displayObject.image.width, debug.meta.displayObject.image.height);
+                    debug.meta.displayObject.cache(0, 0, debug.meta.displayObject.children[0].image.width, debug.meta.displayObject.children[0].image.height);
                     debug = null;
                     debugStart = null;
                     iso.draw();
@@ -334,14 +337,16 @@
             let isScrollDown = e.deltaY > 0;
 
             if (isScrollDown) {
-                if (iso.minimumScale < iso.conductor.itemsStage.scale-0.1) {
-                    iso.conductor.itemsStage.scale -= 0.1;
-                    iso.conductor.gridStage.scale -= 0.1;
+                if (iso.minimumScale < iso.conductor.itemsStage.scale) {
+                    let scale = Math.max(iso.conductor.itemsStage.scale - 0.1, iso.minimumScale);
+                    iso.conductor.itemsStage.scale = scale;
+                    iso.conductor.gridStage.scale -= scale;
                 }
             } else {
-                if (iso.conductor.itemsStage.scale < 0.9) {
-                    iso.conductor.itemsStage.scale += 0.1;
-                    iso.conductor.gridStage.scale += 0.1;
+                if (iso.conductor.itemsStage.scale < 1) {
+                    let scale = Math.min(iso.conductor.itemsStage.scale + 0.1, 1);
+                    iso.conductor.itemsStage.scale += scale;
+                    iso.conductor.gridStage.scale += scale;
                 }
             }
         });
