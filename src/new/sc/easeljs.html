@@ -21,10 +21,8 @@
 </head>
 <body>
 
-<div id="container">
-    <canvas id="grid"></canvas>
-    <canvas id="items"></canvas>
-</div>
+<canvas id="grid"></canvas>
+<canvas id="items"></canvas>
 
 <p>Assets by: <a href="http://kenney.nl/assets?s=isometric">Kenney.nl</a></p>
 
@@ -52,9 +50,9 @@
 
         window.iso = new IsoDom(conductor, {
             debug: true,
-            columns: 100,
-            rows: 100,
-            cellSize: [148, 88],
+            columns: 20,
+            rows: 20,
+            cellSize: [244, 144],
             items: {
                 desk1: {
                     orientation: IsoDom.ORIENTATION_SE,
@@ -141,6 +139,7 @@
                     item.meta.displayObject.addEventListener('click', (e) => {
                         console.log('item: click');
                         if (e.nativeEvent.button === 0) {
+                            if (dragging.active) return;
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
                             item.iso.conductor.itemsStage.mouseEnabled = false;
                             moving = item;
@@ -178,10 +177,55 @@
         iso.fpsLabel.y = 20;
         iso.fpsLabel.cache(0,0, 500, 500);
 
-        /*iso.addItem('desk1', 0, 0, { orientation: IsoDom.ORIENTATION_SW });
-        iso.addItem('meeting_table1', 0, 2, { orientation: IsoDom.ORIENTATION_SW });
-        iso.addItem('meeting_table1', 0, 5, { orientation: IsoDom.ORIENTATION_SW });*/
         iso.draw();
+
+        // Add background
+        iso.background = new createjs.Bitmap(preload.getResult('expensiveBuilding'));
+        iso.conductor.itemsStage.addChild(iso.background);
+        iso.background.x = -900;
+        iso.background.y = -700;
+        iso.conductor.itemsStage.setChildIndex(iso.background, 0);
+
+        let dragging = { mousePressed: false, active: false, startX: 0, startY: 0, endX: 0, endY: 0 };
+        iso.conductor.itemsStage.on('stagemouseup', function(event) {
+            dragging.mousePressed = false;
+            setTimeout(() => {
+                dragging.active = false;
+            }, 10);
+        });
+        iso.conductor.itemsStage.on('stagemousedown', function(event) {
+            dragging.mousePressed = true;
+            dragging.startX = event.stageX;
+            dragging.startY = event.stageY;
+        });
+        iso.conductor.itemsStage.on('stagemousemove', function(event) {
+            if(!dragging.mousePressed) return;
+
+            dragging.endX = event.stageX;
+            dragging.endY = event.stageY;
+
+            let xDiff = dragging.endX - dragging.startX;
+            let yDiff = dragging.endY - dragging.startY;
+
+            if (Math.abs(xDiff) > 3 && Math.abs(yDiff) > 3 && !dragging.active) {
+                dragging.active = true;
+            }
+
+            if (dragging.active) {
+                console.log(`The diff is: X: ${ xDiff } Y: ${ yDiff }`);
+
+                iso.conductor.itemsStage.x = iso.conductor.itemsStage.x + xDiff;
+                iso.conductor.itemsStage.y = iso.conductor.itemsStage.y + yDiff;
+
+                iso.conductor.gridStage.x = iso.conductor.gridStage.x + xDiff;
+                iso.conductor.gridStage.y = iso.conductor.gridStage.y + yDiff;
+
+                dragging.startX = event.stageX;
+                dragging.startY = event.stageY;
+
+               console.log('mouse move!');
+            }
+        });
 
         debug = true;
         document.addEventListener('keydown', (e) => {
@@ -258,6 +302,20 @@
 
             // iso.conductor.itemsStage.update();
         });
+
+        document.addEventListener('wheel', e => {
+            let isScrollDown = e.deltaY > 0;
+
+            if (isScrollDown) {
+                iso.conductor.itemsStage.scale -= 0.1;
+                iso.conductor.gridStage.scale -= 0.1;
+            } else {
+                if (iso.conductor.itemsStage.scale < 1) {
+                    iso.conductor.itemsStage.scale += 0.1;
+                    iso.conductor.gridStage.scale += 0.1;
+                }
+            }
+        });
     });
     preload.loadManifest([
         { src: 'assets/cell.png', id: 'cell' },
@@ -270,6 +328,7 @@
         { src: 'assets/meeting_table1-2.png', id: 'meeting_table1-2' },
         { src: 'assets/meeting_table1-3.png', id: 'meeting_table1-3' },
         { src: 'assets/meeting_table1-4.png', id: 'meeting_table1-4' },
+        { src: 'assets/expensiveBuilding.webp', id: 'expensiveBuilding' },
     ]);
 </script>
 </body>
