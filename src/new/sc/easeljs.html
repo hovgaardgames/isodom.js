@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>isodom.js City Example</title>
     <style>
+        html, body {
+            margin: 0;
+            overflow: hidden;
+        }
         #container {
             position: relative;
             width: 100%;
@@ -113,7 +117,6 @@
                     animation.gotoAndPlay('spin');
                     item.meta.displayObject.addChild(animation);
 
-                    item.meta.displayObject.scale = 0.55;
                     item.meta.displayObject.addEventListener('mouseover', () => {
                         console.log('item: mouseover');
                         if (debug) {
@@ -161,21 +164,12 @@
         //iso.conductor.gridStage.enableMouseOver(20);
         iso.conductor.itemsStage.enableMouseOver(20);
 
-        iso.conductor.gridStage.scale = 0.2;
-        iso.conductor.itemsStage.scale = 0.2;
-
+        // Adding example desks
         for (let row = 0; row < iso.config.rows-3; row = row+4) {
             for (let col = 0; col < iso.config.columns-3; col = col+4) {
                 iso.addItem('desk1', col, row, { orientation: IsoDom.ORIENTATION_SW });
             }
         }
-
-        // add a text object to output the current FPS:
-        iso.fpsLabel = new createjs.Text("-- fps", "bold 60px Arial", "#000");
-        iso.conductor.itemsStage.addChild(iso.fpsLabel);
-        iso.fpsLabel.x = 10;
-        iso.fpsLabel.y = 20;
-        iso.fpsLabel.cache(0,0, 500, 500);
 
         iso.draw();
 
@@ -186,6 +180,18 @@
         iso.background.y = -700;
         iso.conductor.itemsStage.setChildIndex(iso.background, 0);
 
+        // Set scale
+        let backgroundBounds = iso.background.getBounds();
+        iso.minimumScale = Math.ceil(Math.max(
+            (window.innerHeight * 100 / (backgroundBounds.height + iso.background.y)),
+            (window.innerWidth * 100 / (backgroundBounds.width + iso.background.x))
+        )) / 100;
+
+        iso.conductor.gridStage.scale = iso.minimumScale;
+        iso.conductor.itemsStage.scale = iso.minimumScale;
+
+
+        // Setup mouse panning
         let dragging = { mousePressed: false, active: false, startX: 0, startY: 0, endX: 0, endY: 0 };
         iso.conductor.itemsStage.on('stagemouseup', function(event) {
             dragging.mousePressed = false;
@@ -214,11 +220,31 @@
             if (dragging.active) {
                 console.log(`The diff is: X: ${ xDiff } Y: ${ yDiff }`);
 
-                iso.conductor.itemsStage.x = iso.conductor.itemsStage.x + xDiff;
-                iso.conductor.itemsStage.y = iso.conductor.itemsStage.y + yDiff;
+                const scale = iso.conductor.itemsStage.scale;
 
-                iso.conductor.gridStage.x = iso.conductor.gridStage.x + xDiff;
-                iso.conductor.gridStage.y = iso.conductor.gridStage.y + yDiff;
+                // Figure out if we should stop moving because of out-of-bounds
+                let backgroundBounds = iso.background.getBounds();
+
+                let minX = iso.conductor.config.itemsTarget.width - (backgroundBounds.width * scale) - (iso.background.x * scale);
+                let maxX = Math.abs(iso.background.x) * scale;
+
+                let minY = iso.conductor.config.itemsTarget.height - (backgroundBounds.height * scale) - (iso.background.y * scale);
+                let maxY = Math.abs(iso.background.y) * scale;
+
+                let newX = iso.conductor.itemsStage.x + xDiff;
+                let newY = iso.conductor.itemsStage.y + yDiff;
+
+                // Handle X
+                if ((newX * scale) > (minX * scale) && (newX * scale) < (maxX * scale)) {
+                    iso.conductor.itemsStage.x = newX;
+                    iso.conductor.gridStage.x = newX;
+                }
+
+                // Handle Y
+                if ((newY * scale) > (minY * scale) && (newY * scale) < (maxY * scale)) {
+                    iso.conductor.itemsStage.y = newY;
+                    iso.conductor.gridStage.y = newY;
+                }
 
                 dragging.startX = event.stageX;
                 dragging.startY = event.stageY;
@@ -307,10 +333,12 @@
             let isScrollDown = e.deltaY > 0;
 
             if (isScrollDown) {
-                iso.conductor.itemsStage.scale -= 0.1;
-                iso.conductor.gridStage.scale -= 0.1;
+                if (iso.minimumScale < iso.conductor.itemsStage.scale-0.1) {
+                    iso.conductor.itemsStage.scale -= 0.1;
+                    iso.conductor.gridStage.scale -= 0.1;
+                }
             } else {
-                if (iso.conductor.itemsStage.scale < 1) {
+                if (iso.conductor.itemsStage.scale < 0.9) {
                     iso.conductor.itemsStage.scale += 0.1;
                     iso.conductor.gridStage.scale += 0.1;
                 }
