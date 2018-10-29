@@ -8,6 +8,7 @@
             margin: 0;
             overflow: hidden;
         }
+
         #container {
             position: relative;
             width: 100%;
@@ -41,7 +42,6 @@
     let debugStart = null;
     let preload = new createjs.LoadQueue();
     preload.addEventListener('complete', () => {
-
         const conductor = new IsoDomEaselJsConductor({
             gridTarget: document.getElementById('grid'),
             itemsTarget: document.getElementById('items'),
@@ -52,8 +52,20 @@
             offsetPivot: 'bottom-right',
         });
 
+        let setMininmumScale = () => {
+            // Set scale
+            let backgroundBounds = iso.background.getBounds();
+            iso.minimumScale = Math.ceil(Math.max(
+                (iso.conductor.gridStage._viewportHeight * 100 / (backgroundBounds.height + iso.background.y)),
+                (iso.conductor.gridStage._viewportWidth * 100 / (backgroundBounds.width + iso.background.x))
+            )) / 100;
+
+            iso.conductor.gridStage.scale = iso.minimumScale;
+            iso.conductor.itemsStage.scale = iso.minimumScale;
+        };
+
         window.iso = new IsoDom(conductor, {
-            debug: true,
+            debug: false,
             columns: 20,
             rows: 20,
             cellSize: [264, 152],
@@ -62,20 +74,20 @@
                     orientation: IsoDom.ORIENTATION_SE,
                     size: [2, 2],
                     images: {
-                        [IsoDom.ORIENTATION_NW]: { url: 'desk1-1', offset: { top: 0, left: 0 } },
-                        [IsoDom.ORIENTATION_NE]: { url: 'desk1-2', offset: { top: 0, left: 0 } },
-                        [IsoDom.ORIENTATION_SE]: { url: 'desk1-3', offset: { top: 0, left: 0 } },
-                        [IsoDom.ORIENTATION_SW]: { url: 'desk1-4', offset: { top: 209, left: 74 } },
+                        [IsoDom.ORIENTATION_NW]: {url: 'desk1-1', offset: {top: 157, left: 89}},
+                        [IsoDom.ORIENTATION_NE]: {url: 'desk1-2', offset: {top: 157, left: 168}},
+                        [IsoDom.ORIENTATION_SE]: {url: 'desk1-3', offset: {top: 209, left: 168}},
+                        [IsoDom.ORIENTATION_SW]: {url: 'desk1-4', offset: {top: 209, left: 89}},
                     },
                 },
                 meeting_table1: {
                     orientation: IsoDom.ORIENTATION_SE,
                     size: [6, 3],
                     images: {
-                        [IsoDom.ORIENTATION_NE]: { url: 'meeting_table1-1', offset: { top: -0, left: -0 } },
-                        [IsoDom.ORIENTATION_NW]: { url: 'meeting_table1-2', offset: { top: -0, left: -0 } },
-                        [IsoDom.ORIENTATION_SW]: { url: 'meeting_table1-4', offset: { top: 286, left: 379 } },
-                        [IsoDom.ORIENTATION_SE]: { url: 'meeting_table1-3', offset: { top: -0, left: -0 } },
+                        [IsoDom.ORIENTATION_NE]: {url: 'meeting_table1-1', offset: {top: -0, left: -0}},
+                        [IsoDom.ORIENTATION_NW]: {url: 'meeting_table1-2', offset: {top: -0, left: -0}},
+                        [IsoDom.ORIENTATION_SW]: {url: 'meeting_table1-4', offset: {top: 286, left: 379}},
+                        [IsoDom.ORIENTATION_SE]: {url: 'meeting_table1-3', offset: {top: -0, left: -0}},
                     },
                 },
             },
@@ -87,15 +99,17 @@
                             iso.conductor.updateItemPosition(moving, cell);
                         }
                     });
-                    cell.meta.displayObject.addEventListener('click', () => {
-                        console.log('cell: click');
-                        if (moving) {
-                            moving.iso.moveItem(moving, cell.x, cell.y);
-                            moving.iso.draw();
-                            moving.iso.conductor.config.itemsTarget.style.pointerEvents = '';
-                            moving.iso.conductor.itemsStage.mouseEnabled = true;
-                            iso.conductor.gridStage.enableMouseOver(0);
-                            moving = null;
+                    cell.meta.displayObject.addEventListener('click', (e) => {
+                        if (e.nativeEvent.button === 0) { // left click
+                            console.log('cell: click');
+                            if (moving) {
+                                moving.iso.moveItem(moving, cell.x, cell.y);
+                                moving.iso.draw();
+                                moving.iso.conductor.config.itemsTarget.style.pointerEvents = '';
+                                iso.conductor.itemsStage.mouseEnabled = true;
+                                iso.conductor.gridStage.enableMouseOver(0);
+                                moving = null;
+                            }
                         }
                     });
                 },
@@ -145,18 +159,23 @@
                         if (e.nativeEvent.button === 0) {
                             if (dragging.active) return;
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
-                            item.iso.conductor.itemsStage.mouseEnabled = false;
+                            iso.conductor.itemsStage.mouseEnabled = false;
                             iso.conductor.gridStage.enableMouseOver();
                             moving = item;
                         } else if (e.nativeEvent.button === 2) {
-                            item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
-                            item.meta.displayObject.children[0].filters = [
-                                new createjs.ColorFilter(1, 1, 1, 1, 100, 0, 0, 100),
-                            ];
-                            item.meta.displayObject.children[0].cache(0, 0, item.meta.displayObject.children[0].image.width, item.meta.displayObject.children[0].image.height);
-                            debug = item;
-                            const imageOffset = item.image().offset;
-                            debugStart = { top: Number(item.meta.displayObject.y) - imageOffset.top, left: Number(item.meta.displayObject.x) - imageOffset.left };
+                            if (iso.debug) {
+                                item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
+                                item.meta.displayObject.children[0].filters = [
+                                    new createjs.ColorFilter(1, 1, 1, 1, 100, 0, 0, 100),
+                                ];
+                                item.meta.displayObject.children[0].cache(0, 0, item.meta.displayObject.children[0].image.width, item.meta.displayObject.children[0].image.height);
+                                debug = item;
+                                const imageOffset = item.image().offset;
+                                debugStart = {
+                                    top: Number(item.meta.displayObject.y) - imageOffset.top,
+                                    left: Number(item.meta.displayObject.x) - imageOffset.left
+                                };
+                            }
                         }
                     });
                 },
@@ -165,11 +184,10 @@
 
         iso.conductor.itemsStage.enableMouseOver(20);
 
-
         // Adding example desks
-        for (let row = 0; row < iso.config.rows-3; row = row+4) {
-            for (let col = 0; col < iso.config.columns-3; col = col+4) {
-                iso.addItem('desk1', col, row, { orientation: IsoDom.ORIENTATION_SW });
+        for (let row = 0; row < iso.config.rows - 3; row = row + 4) {
+            for (let col = 0; col < iso.config.columns - 3; col = col + 4) {
+                iso.addItem('desk1', col, row, {orientation: IsoDom.ORIENTATION_SE});
             }
         }
 
@@ -177,40 +195,32 @@
 
         // Add background
         iso.background = new createjs.Bitmap(preload.getResult('expensiveBuilding'));
-        iso.background.setBounds(0,0, 6144, 3840); // Set bounds manually to allow for SPOT compatible image
+        iso.background.setBounds(0, 0, 6144, 3840); // Set bounds manually to allow for SPOT compatible image
         iso.conductor.itemsStage.addChild(iso.background);
         iso.background.x = -430;
         iso.background.y = -650;
-        if(debug) {
+        if (debug) {
             iso.background.alpha = 0.5;
         }
         iso.conductor.itemsStage.setChildIndex(iso.background, 0);
 
-        // Set scale
-        let backgroundBounds = iso.background.getBounds();
-        iso.minimumScale = Math.ceil(Math.max(
-            (window.innerHeight * 100 / (backgroundBounds.height + iso.background.y)),
-            (window.innerWidth * 100 / (backgroundBounds.width + iso.background.x))
-        )) / 100;
-
-        iso.conductor.gridStage.scale = iso.minimumScale;
-        iso.conductor.itemsStage.scale = iso.minimumScale;
+        setMininmumScale();
 
         // Setup mouse panning
-        let dragging = { mousePressed: false, active: false, startX: 0, startY: 0, endX: 0, endY: 0 };
-        iso.conductor.itemsStage.on('stagemouseup', function(event) {
+        let dragging = {mousePressed: false, active: false, startX: 0, startY: 0, endX: 0, endY: 0};
+        iso.conductor.itemsStage.on('stagemouseup', function (event) {
             dragging.mousePressed = false;
             setTimeout(() => {
                 dragging.active = false;
             }, 10);
         });
-        iso.conductor.itemsStage.on('stagemousedown', function(event) {
+        iso.conductor.itemsStage.on('stagemousedown', function (event) {
             dragging.mousePressed = true;
             dragging.startX = event.stageX;
             dragging.startY = event.stageY;
         });
-        iso.conductor.itemsStage.on('stagemousemove', function(event) {
-            if(!dragging.mousePressed) return;
+        iso.conductor.itemsStage.on('stagemousemove', function (event) {
+            if (!dragging.mousePressed) return;
 
             dragging.endX = event.stageX;
             dragging.endY = event.stageY;
@@ -254,7 +264,7 @@
                 dragging.startX = event.stageX;
                 dragging.startY = event.stageY;
 
-               console.log('mouse move!');
+                console.log('mouse move!');
             }
         });
 
@@ -349,20 +359,39 @@
                     iso.conductor.gridStage.scale += scale;
                 }
             }
+
+            //iso.conductor.itemsStage.x = -(iso.background.getBounds().width * iso.conductor.itemsStage.scale) / 2;
+            //iso.conductor.itemsStage.y = -(iso.background.getBounds().height * iso.conductor.itemsStage.scale) / 2;
         });
+
+        document.addEventListener('contextmenu', e => {
+            if (moving) {
+                moving.rotate();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            for (let stage of [iso.conductor.gridStage, iso.conductor.itemsStage]) {
+                stage.canvas.width = window.innerWidth;
+                stage.canvas.height  = window.innerHeight;
+                stage.updateViewport(window.innerWidth, window.innerHeight);
+            }
+
+            setMininmumScale();
+        })
     });
     preload.loadManifest([
-        { src: 'assets/cell.png', id: 'cell' },
-        { src: 'assets/coin-sprite.png', id: 'coin-sprite' },
-        { src: 'assets/desk1-1.png', id: 'desk1-1' },
-        { src: 'assets/desk1-2.png', id: 'desk1-2' },
-        { src: 'assets/desk1-3.png', id: 'desk1-3' },
-        { src: 'assets/desk1-4.png', id: 'desk1-4' },
-        { src: 'assets/meeting_table1-1.png', id: 'meeting_table1-1' },
-        { src: 'assets/meeting_table1-2.png', id: 'meeting_table1-2' },
-        { src: 'assets/meeting_table1-3.png', id: 'meeting_table1-3' },
-        { src: 'assets/meeting_table1-4.png', id: 'meeting_table1-4' },
-        { src: 'assets/expensiveBuilding.webp', id: 'expensiveBuilding' },
+        {src: 'assets/cell.png', id: 'cell'},
+        {src: 'assets/coin-sprite.png', id: 'coin-sprite'},
+        {src: 'assets/desk1-1.png', id: 'desk1-1'},
+        {src: 'assets/desk1-2.png', id: 'desk1-2'},
+        {src: 'assets/desk1-3.png', id: 'desk1-3'},
+        {src: 'assets/desk1-4.png', id: 'desk1-4'},
+        {src: 'assets/meeting_table1-1.png', id: 'meeting_table1-1'},
+        {src: 'assets/meeting_table1-2.png', id: 'meeting_table1-2'},
+        {src: 'assets/meeting_table1-3.png', id: 'meeting_table1-3'},
+        {src: 'assets/meeting_table1-4.png', id: 'meeting_table1-4'},
+        {src: 'assets/expensiveBuilding.webp', id: 'expensiveBuilding'},
     ]);
 </script>
 </body>

@@ -61,6 +61,7 @@ class IsoDomEaselJsConductor {
             itemAdded: this.itemAdded.bind(this),
             itemMoved: this._itemMoved.bind(this),
             renderCell: this.renderCell.bind(this),
+            itemRotated: this._itemUpdated.bind(this),
             draw: () => {
                 this.updateItemIndexes();
             },
@@ -97,6 +98,20 @@ class IsoDomEaselJsConductor {
         displayObject.addChild(image);
         item.meta.displayObject = displayObject;
         this.itemsStage.addChild(item.meta.displayObject);
+    }
+
+    /**
+     * Update item in easelJS
+     * @param {IsoDomItem} item
+     */
+    _itemUpdated(item) {
+        item.meta.displayObject.removeChild(item.meta.displayObject.children[0]);
+
+        const resolvedImage = this.config.resolve(item.image().url);
+        const image = new createjs.Bitmap(resolvedImage);
+        item.meta.displayObject.addChild(image);
+        item.meta.displayObject.setChildIndex(image, 0);
+        this.updateItemPosition(item, item.meta.temporaryCell || item.cell);
     }
 
     /**
@@ -155,6 +170,8 @@ class IsoDomEaselJsConductor {
 
         item.meta.displayObject.x = destX + image.offset.left;
         item.meta.displayObject.y = destY + image.offset.top;
+
+        item.meta.temporaryCell = cell;
     }
 
     /**

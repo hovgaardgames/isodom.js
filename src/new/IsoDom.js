@@ -154,6 +154,53 @@ class IsoDomItem {
         const horizontal = [IsoDom.ORIENTATION_SW, IsoDom.ORIENTATION_NE].includes(this.orientation);
         return this.defaults.size[horizontal ? 1 : 0];
     }
+
+    /**
+     * Rotate image.
+     * @param {Boolean} clockwise
+     */
+    rotate(clockwise = true) {
+        const current = this.iso.config.orientationOrder.indexOf(this.orientation);
+        let next = clockwise ? current + 1 : current - 1;
+
+        if (next < 0) {
+            next = this.iso.config.orientationOrder.length - 1;
+        } else if (next >= this.iso.config.orientationOrder.length) {
+            next = 0;
+        }
+
+        this.orientate(this.iso.config.orientationOrder[next]);
+        this.update();
+        this.iso.emit('itemRotated', this);
+    }
+
+    /**
+     * Orientate item to specific direction.
+     * @param {String} orientation
+     */
+    orientate(orientation) {
+        if (!this.defaults.images[orientation]) {
+            throw new Error(`Invalid orientation ("${orientation}") provided for ${this.name} item.`);
+        }
+
+        this.orientation = orientation;
+    }
+
+    /**
+     * Update IsoDomItem.
+     */
+    update() {
+        if (this.el) {
+            if (typeof this.defaults.update === 'function') {
+                this.defaults.update(this);
+            } else {
+                this.iso.config.updateItem(this);
+            }
+
+            this.el.setAttribute('data-name', this.name);
+            this.el.setAttribute('data-orientation', this.orientation);
+        }
+    }
 }
 
 /**
