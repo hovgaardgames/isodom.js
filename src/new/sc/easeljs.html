@@ -62,6 +62,35 @@
 
             iso.conductor.gridStage.scale = iso.minimumScale;
             iso.conductor.itemsStage.scale = iso.minimumScale;
+            adjustView();
+        };
+
+        let adjustView = () => {
+            let backgroundBounds = iso.background.getBounds();
+            let scale = iso.conductor.itemsStage.scale;
+            let minX = iso.conductor.config.itemsTarget.width - (backgroundBounds.width * scale) - (iso.background.x * scale);
+            let maxX = Math.abs(iso.background.x) * scale;
+
+            let minY = iso.conductor.config.itemsTarget.height - (backgroundBounds.height * scale) - (iso.background.y * scale);
+            let maxY = Math.abs(iso.background.y) * scale;
+
+            if (iso.conductor.itemsStage.x > maxX) {
+                iso.conductor.itemsStage.x = maxX;
+            }
+
+            if (iso.conductor.itemsStage.x < minX) {
+                iso.conductor.itemsStage.x = minX;
+            }
+
+            if (iso.conductor.itemsStage.y > maxY) {
+                iso.conductor.itemsStage.y = maxY;
+            }
+
+            if (iso.conductor.itemsStage.y < minY) {
+                iso.conductor.itemsStage.y = minY;
+            }
+
+
         };
 
         window.iso = new IsoDom(conductor, {
@@ -199,7 +228,7 @@
         iso.conductor.itemsStage.addChild(iso.background);
         iso.background.x = -430;
         iso.background.y = -650;
-        if (debug) {
+        if (iso.debug) {
             iso.background.alpha = 0.5;
         }
         iso.conductor.itemsStage.setChildIndex(iso.background, 0);
@@ -346,22 +375,25 @@
         document.addEventListener('wheel', e => {
             let isScrollDown = e.deltaY > 0;
 
+            let scale = 1;
             if (isScrollDown) {
                 if (iso.minimumScale < iso.conductor.itemsStage.scale) {
-                    let scale = Math.max(iso.conductor.itemsStage.scale - 0.1, iso.minimumScale);
+                    scale = Math.max(iso.conductor.itemsStage.scale - 0.1, iso.minimumScale);
                     iso.conductor.itemsStage.scale = scale;
-                    iso.conductor.gridStage.scale -= scale;
+                    iso.conductor.gridStage.scale = scale;
                 }
             } else {
                 if (iso.conductor.itemsStage.scale < 1) {
-                    let scale = Math.min(iso.conductor.itemsStage.scale + 0.1, 1);
-                    iso.conductor.itemsStage.scale += scale;
-                    iso.conductor.gridStage.scale += scale;
+                    scale = Math.min(iso.conductor.itemsStage.scale + 0.1, 1);
+                    iso.conductor.itemsStage.scale = scale;
+                    iso.conductor.gridStage.scale = scale;
                 }
             }
 
-            //iso.conductor.itemsStage.x = -(iso.background.getBounds().width * iso.conductor.itemsStage.scale) / 2;
-            //iso.conductor.itemsStage.y = -(iso.background.getBounds().height * iso.conductor.itemsStage.scale) / 2;
+            iso.conductor.itemsStage.x *= scale;
+            iso.conductor.itemsStage.y *= scale;
+
+            adjustView();
         });
 
         document.addEventListener('contextmenu', e => {
@@ -375,6 +407,7 @@
                 stage.canvas.width = window.innerWidth;
                 stage.canvas.height  = window.innerHeight;
                 stage.updateViewport(window.innerWidth, window.innerHeight);
+                adjustView();
             }
 
             setMininmumScale();
