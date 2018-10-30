@@ -232,5 +232,19 @@ class IsoDomEaselJsConductor {
      */
     _afterInit() {
         this.updateItemIndexes();
+
+        this.itemsStage.enableMouseOver(20);
+
+        if (this.iso.config.background) {
+            this.iso.background = new createjs.Bitmap(this.config.resolve('expensiveBuilding'));
+            this.iso.background.setBounds(0, 0, this.iso.config.background.width, this.iso.config.background.height); // Set bounds manually to allow for SPOT compatible image
+            this.itemsStage.addChild(this.iso.background);
+            this.iso.background.x = this.iso.config.background.offset.x;
+            this.iso.background.y = this.iso.config.background.offset.y;
+            if (this.iso.config.debug) {
+                this.iso.background.alpha = 0.5;
+            }
+            this.itemsStage.setChildIndex(this.iso.background, 0);
+        }
     }
 }

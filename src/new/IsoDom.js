@@ -351,6 +351,18 @@ class IsoDom {
         this.emit('itemMoved', item, fromCell, toCell, this);
     }
 
+
+    /**
+     * Remove item from grid.
+     * @param {IsoDomItem} item
+     */
+    removeItem(item) {
+        this._unmapItemFromCells(item);
+        item.iso.conductor.itemsStage.removeChild(item.meta.displayObject);
+        this.emit('itemRemoved', item, this);
+    }
+
+
     /**
      * Assert item placement on cell:
      * - the cell is valid;
@@ -399,6 +411,26 @@ class IsoDom {
      */
     isOutOfBounds(item, x, y) {
         return !Boolean(this.cell(x + item.getWidth() - 1, y + item.getHeight() - 1));
+    }
+
+    /**
+     * Return closest cell that does not go out of bounds.
+     * @param {IsoDomCell} cell
+     * @returns {IsoDomCell}
+     */
+    closestInBoundCell(item, cell) {
+        let x = cell.x;
+        let y = cell.y;
+
+        if (cell.x + item.getWidth() > this.config.columns) {
+            x = this.config.columns - item.getWidth();
+        }
+
+        if (cell.y + item.getHeight() > this.config.rows) {
+            y = this.config.rows - item.getHeight();
+        }
+
+        return this.cell(x, y);
     }
 
     /**

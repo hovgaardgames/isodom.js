@@ -29,12 +29,11 @@
 <canvas id="grid"></canvas>
 <canvas id="items"></canvas>
 
-<p>Assets by: <a href="http://kenney.nl/assets?s=isometric">Kenney.nl</a></p>
-
 <script src="easeljs.mod.js"></script>
 <script src="https://code.createjs.com/1.0.0/preloadjs.min.js"></script>
 <script src="../IsoDom.js" type="application/javascript"></script>
 <script src="../conductors/easeljs/Conductor.js" type="application/javascript"></script>
+<script src="../plugins/Controls.js" type="application/javascript"></script>
 <script>
     /** @type {IsoDomItem} */
     let moving = null;
@@ -52,51 +51,16 @@
             offsetPivot: 'bottom-right',
         });
 
-        let setMininmumScale = () => {
-            // Set scale
-            let backgroundBounds = iso.background.getBounds();
-            iso.minimumScale = Math.ceil(Math.max(
-                (iso.conductor.gridStage._viewportHeight * 100 / (backgroundBounds.height + iso.background.y)),
-                (iso.conductor.gridStage._viewportWidth * 100 / (backgroundBounds.width + iso.background.x))
-            )) / 100;
-
-            iso.conductor.gridStage.scale = iso.minimumScale;
-            iso.conductor.itemsStage.scale = iso.minimumScale;
-            adjustView();
-        };
-
-        let adjustView = () => {
-            let backgroundBounds = iso.background.getBounds();
-            let scale = iso.conductor.itemsStage.scale;
-            let minX = iso.conductor.config.itemsTarget.width - (backgroundBounds.width * scale) - (iso.background.x * scale);
-            let maxX = Math.abs(iso.background.x) * scale;
-
-            let minY = iso.conductor.config.itemsTarget.height - (backgroundBounds.height * scale) - (iso.background.y * scale);
-            let maxY = Math.abs(iso.background.y) * scale;
-
-            if (iso.conductor.itemsStage.x > maxX) {
-                iso.conductor.itemsStage.x = maxX;
-            }
-
-            if (iso.conductor.itemsStage.x < minX) {
-                iso.conductor.itemsStage.x = minX;
-            }
-
-            if (iso.conductor.itemsStage.y > maxY) {
-                iso.conductor.itemsStage.y = maxY;
-            }
-
-            if (iso.conductor.itemsStage.y < minY) {
-                iso.conductor.itemsStage.y = minY;
-            }
-
-
-        };
-
         window.iso = new IsoDom(conductor, {
             debug: false,
             columns: 20,
             rows: 20,
+            background: {
+                src: 'expensiveBuilding',
+                offset: { x: -430, y: -650},
+                width: 6144,
+                height: 3840
+            },
             cellSize: [264, 152],
             items: {
                 desk1: {
@@ -125,6 +89,27 @@
                     cell.meta.displayObject.addEventListener('mouseover', () => {
                         console.log('cell: mouseover');
                         if (moving) {
+                            if (iso.isOutOfBounds(moving, cell.x, cell.y)) {
+                                cell = iso.closestInBoundCell(moving, cell);
+                            }
+
+                            let blocked = false;
+                            try {
+                                iso.assertItemPlacement(moving, cell.x, cell.y, moving);
+                            } catch(e) {
+                                blocked = true;
+                            }
+
+                            if (blocked) {
+                                moving.meta.displayObject.children[0].filters = [
+                                    new createjs.ColorFilter(1, 1, 1, 1, 10, 10, 10, 0),
+                                ];
+                                let image = moving.meta.displayObject.children[0].image;
+                                moving.meta.displayObject.children[0].cache(0, 0, image.width, image.height);
+                            } else {
+                                //moving.meta.displayObject.children[0].filters = [];
+                            }
+
                             iso.conductor.updateItemPosition(moving, cell);
                         }
                     });
@@ -186,13 +171,13 @@
                     item.meta.displayObject.addEventListener('click', (e) => {
                         console.log('item: click');
                         if (e.nativeEvent.button === 0) {
-                            if (dragging.active) return;
+                            if (iso.controls.dragging.active) return;
                             item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
                             iso.conductor.itemsStage.mouseEnabled = false;
                             iso.conductor.gridStage.enableMouseOver();
                             moving = item;
                         } else if (e.nativeEvent.button === 2) {
-                            if (iso.debug) {
+                            if (iso.config.debug) {
                                 item.iso.conductor.config.itemsTarget.style.pointerEvents = 'none';
                                 item.meta.displayObject.children[0].filters = [
                                     new createjs.ColorFilter(1, 1, 1, 1, 100, 0, 0, 100),
@@ -211,103 +196,16 @@
             },
         });
 
-        iso.conductor.itemsStage.enableMouseOver(20);
-
-        // Adding example desks
-        for (let row = 0; row < iso.config.rows - 3; row = row + 4) {
-            for (let col = 0; col < iso.config.columns - 3; col = col + 4) {
-                iso.addItem('desk1', col, row, {orientation: IsoDom.ORIENTATION_SE});
-            }
-        }
+        iso.addItem('desk1', 1, 1, {orientation: IsoDom.ORIENTATION_SE});
+        iso.addItem('desk1', 3, 3, {orientation: IsoDom.ORIENTATION_SE});
 
         iso.draw();
 
-        // Add background
-        iso.background = new createjs.Bitmap(preload.getResult('expensiveBuilding'));
-        iso.background.setBounds(0, 0, 6144, 3840); // Set bounds manually to allow for SPOT compatible image
-        iso.conductor.itemsStage.addChild(iso.background);
-        iso.background.x = -430;
-        iso.background.y = -650;
-        if (iso.debug) {
-            iso.background.alpha = 0.5;
-        }
-        iso.conductor.itemsStage.setChildIndex(iso.background, 0);
-
-        setMininmumScale();
-
-        // Setup mouse panning
-        let dragging = {mousePressed: false, active: false, startX: 0, startY: 0, endX: 0, endY: 0};
-        iso.conductor.itemsStage.on('stagemouseup', function (event) {
-            dragging.mousePressed = false;
-            setTimeout(() => {
-                dragging.active = false;
-            }, 10);
-        });
-        iso.conductor.itemsStage.on('stagemousedown', function (event) {
-            dragging.mousePressed = true;
-            dragging.startX = event.stageX;
-            dragging.startY = event.stageY;
-        });
-        iso.conductor.itemsStage.on('stagemousemove', function (event) {
-            if (!dragging.mousePressed) return;
-
-            dragging.endX = event.stageX;
-            dragging.endY = event.stageY;
-
-            let xDiff = dragging.endX - dragging.startX;
-            let yDiff = dragging.endY - dragging.startY;
-
-            if (Math.abs(xDiff) > 3 && Math.abs(yDiff) > 3 && !dragging.active) {
-                dragging.active = true;
-            }
-
-            if (dragging.active) {
-                console.log(`The diff is: X: ${ xDiff } Y: ${ yDiff }`);
-
-                const scale = iso.conductor.itemsStage.scale;
-
-                // Figure out if we should stop moving because of out-of-bounds
-                let backgroundBounds = iso.background.getBounds();
-
-                let minX = iso.conductor.config.itemsTarget.width - (backgroundBounds.width * scale) - (iso.background.x * scale);
-                let maxX = Math.abs(iso.background.x) * scale;
-
-                let minY = iso.conductor.config.itemsTarget.height - (backgroundBounds.height * scale) - (iso.background.y * scale);
-                let maxY = Math.abs(iso.background.y) * scale;
-
-                let newX = iso.conductor.itemsStage.x + xDiff;
-                let newY = iso.conductor.itemsStage.y + yDiff;
-
-                // Handle X
-                if ((newX * scale) > (minX * scale) && (newX * scale) < (maxX * scale)) {
-                    iso.conductor.itemsStage.x = newX;
-                    iso.conductor.gridStage.x = newX;
-                }
-
-                // Handle Y
-                if ((newY * scale) > (minY * scale) && (newY * scale) < (maxY * scale)) {
-                    iso.conductor.itemsStage.y = newY;
-                    iso.conductor.gridStage.y = newY;
-                }
-
-                dragging.startX = event.stageX;
-                dragging.startY = event.stageY;
-
-                console.log('mouse move!');
-            }
-        });
-
         document.addEventListener('keydown', (e) => {
-            if (!debug) {
-                return;
-            }
-
             let mod = 1;
             if (e.shiftKey) {
                 mod = 10;
             }
-
-            let wasdStepSize = 10;
 
             switch (e.code) {
                 case 'ArrowUp':
@@ -351,49 +249,20 @@
                     iso.conductor.config.itemsTarget.style.pointerEvents = '';
                     e.preventDefault();
                     break;
-                case 'KeyW':
-                    iso.conductor.itemsStage.y += wasdStepSize;
-                    iso.conductor.gridStage.y += wasdStepSize;
-                    break;
-                case 'KeyA':
-                    iso.conductor.itemsStage.x += wasdStepSize;
-                    iso.conductor.gridStage.x += wasdStepSize;
-                    break;
-                case 'KeyS':
-                    iso.conductor.itemsStage.y -= wasdStepSize;
-                    iso.conductor.gridStage.y -= wasdStepSize;
-                    break;
-                case 'KeyD':
-                    iso.conductor.itemsStage.x -= wasdStepSize;
-                    iso.conductor.gridStage.x -= wasdStepSize;
+
+                case "Delete":
+                    if (moving) {
+                        iso.removeItem(moving);
+                        iso.draw();
+                        iso.conductor.itemsStage.mouseEnabled = true;
+                        iso.conductor.gridStage.enableMouseOver(0);
+                        iso.conductor.config.itemsTarget.style.pointerEvents = '';
+                        moving = null;
+                    }
                     break;
             }
 
             // iso.conductor.itemsStage.update();
-        });
-
-        document.addEventListener('wheel', e => {
-            let isScrollDown = e.deltaY > 0;
-
-            let scale = 1;
-            if (isScrollDown) {
-                if (iso.minimumScale < iso.conductor.itemsStage.scale) {
-                    scale = Math.max(iso.conductor.itemsStage.scale - 0.1, iso.minimumScale);
-                    iso.conductor.itemsStage.scale = scale;
-                    iso.conductor.gridStage.scale = scale;
-                }
-            } else {
-                if (iso.conductor.itemsStage.scale < 1) {
-                    scale = Math.min(iso.conductor.itemsStage.scale + 0.1, 1);
-                    iso.conductor.itemsStage.scale = scale;
-                    iso.conductor.gridStage.scale = scale;
-                }
-            }
-
-            iso.conductor.itemsStage.x *= scale;
-            iso.conductor.itemsStage.y *= scale;
-
-            adjustView();
         });
 
         document.addEventListener('contextmenu', e => {
@@ -402,16 +271,7 @@
             }
         });
 
-        window.addEventListener('resize', () => {
-            for (let stage of [iso.conductor.gridStage, iso.conductor.itemsStage]) {
-                stage.canvas.width = window.innerWidth;
-                stage.canvas.height  = window.innerHeight;
-                stage.updateViewport(window.innerWidth, window.innerHeight);
-                adjustView();
-            }
-
-            setMininmumScale();
-        })
+        iso.controls = new IsoDomControls(iso.conductor);
     });
     preload.loadManifest([
         {src: 'assets/cell.png', id: 'cell'},
